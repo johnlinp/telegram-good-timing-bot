@@ -1,4 +1,0 @@
-module.exports = {
-    token: 'PUT-YOUR-TOKEN-HERE',
-    webhookUrl: 'https://example.com/',
-};

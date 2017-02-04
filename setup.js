@@ -1,11 +1,10 @@
 var request = require('request');
-var config = require('./config.js');
 
 var sendTelegramApi = function(methodName, formData, callback) {
     var API_URL = 'https://api.telegram.org/';
 
     request.post({
-        url: API_URL + 'bot' + config.token + '/' + methodName,
+        url: API_URL + 'bot' + process.env.BOT_TOKEN + '/' + methodName,
         formData: formData,
     }, function(error, response, body) {
         if (error) {
@@ -35,13 +34,18 @@ var checkTokenValid = function() {
 var setWebhook = function() {
     process.stdout.write('setting web hook... ');
     sendTelegramApi('setWebhook', {
-        url: config.webhookUrl,
+        url: process.env.BOT_WEBHOOK_URL,
     }, function(json) {
-        console.log('webhook set to', config.webhookUrl);
+        console.log('webhook set to', process.env.BOT_WEBHOOK_URL);
     });
 };
 
 var main = function() {
+    if (!process.env.BOT_TOKEN) {
+        console.log('please run "npm run env" first');
+        return;
+    }
+
     checkTokenValid();
 };
 
