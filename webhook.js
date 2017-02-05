@@ -23,11 +23,11 @@ var sendTelegramApi = function(methodName, formData, callback) {
     });
 };
 
-var checkTokenValid = function() {
+var checkTokenValid = function(callback) {
     process.stdout.write('checking token... ');
     sendTelegramApi('getMe', null, function(json) {
         console.log('token is valid');
-        setWebhook();
+        callback();
     });
 };
 
@@ -40,13 +40,33 @@ var setWebhook = function() {
     });
 };
 
+var removeWebhook = function() {
+    process.stdout.write('deleting web hook... ');
+    sendTelegramApi('deleteWebhook', null, function(json) {
+        console.log('webhook deleted');
+    });
+};
+
 var main = function() {
+    if (process.argv.length < 3) {
+        console.log('usage:');
+        console.log('    node webhook.js <setup|remove>');
+        return;
+    }
+
     if (!process.env.BOT_TOKEN) {
         console.log('please run "npm run env" first');
         return;
     }
 
-    checkTokenValid();
+    var action = process.argv[2];
+    if (action == 'setup') {
+        checkTokenValid(setWebhook);
+    } else if (action == 'remove') {
+        checkTokenValid(removeWebhook);
+    } else {
+        console.log('action can only be "setup" or "remove"');
+    }
 };
 
 main();
