@@ -32,7 +32,7 @@ var checkTokenValid = function(callback) {
 };
 
 var setWebhook = function() {
-    process.stdout.write('setting web hook... ');
+    process.stdout.write('setting webhook... ');
     sendTelegramApi('setWebhook', {
         url: process.env.BOT_WEBHOOK_URL,
     }, function(json) {
@@ -41,7 +41,7 @@ var setWebhook = function() {
 };
 
 var removeWebhook = function() {
-    process.stdout.write('deleting web hook... ');
+    process.stdout.write('deleting webhook... ');
     sendTelegramApi('deleteWebhook', null, function(json) {
         console.log('webhook deleted');
     });
@@ -55,7 +55,7 @@ var main = function() {
     }
 
     if (!process.env.BOT_TOKEN) {
-        console.log('please run "npm run env" first');
+        console.log('please export env vars in .env first');
         return;
     }
 
