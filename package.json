@@ -4,12 +4,9 @@
   "description": "It is a [Telegram](https://telegram.org/) Bot to help you find a good timing to do things.",
   "main": "index.js",
   "dependencies": {
-    "request": "^2.79.0"
   },
   "devDependencies": {},
   "scripts": {
-    "setup-webhook": "export $(cat .env | xargs) && node webhook.js setup",
-    "remove-webhook": "export $(cat .env | xargs) && node webhook.js remove",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
