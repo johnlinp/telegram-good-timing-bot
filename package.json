@@ -11,6 +11,8 @@
   "devDependencies": {},
   "scripts": {
     "start": "export $(cat .env | xargs) && node index.js",
+    "setup-webhook": "export $(cat .env | xargs) && node webhook.js setup",
+    "remove-webhook": "export $(cat .env | xargs) && node webhook.js remove",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
