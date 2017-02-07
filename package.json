@@ -4,9 +4,13 @@
   "description": "It is a [Telegram](https://telegram.org/) Bot to help you find a good timing to do things.",
   "main": "index.js",
   "dependencies": {
+    "body-parser": "^1.16.0",
+    "express": "^4.14.1",
+    "node-telegram-bot-api": "^0.21.1"
   },
   "devDependencies": {},
   "scripts": {
+    "start": "export $(cat .env | xargs) && node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
