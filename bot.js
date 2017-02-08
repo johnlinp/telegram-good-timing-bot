@@ -11,57 +11,49 @@ if (process.env.NODE_ENV === 'production') {
 
 console.log('Bot server started in the ' + process.env.NODE_ENV + ' mode');
 
-var parseSentence = function(sentence) {
+var parseSentence = function(msg, callback) {
     var matches;
 
-    matches = /^\/start/i.exec(sentence);
+    matches = /^\/start/i.exec(msg.text);
     if (matches) {
-        return {
-            action: 'START',
-        };
+        callback(msg, 'START');
+        return;
     }
 
-    matches = /^\/help/i.exec(sentence);
+    matches = /^\/help/i.exec(msg.text);
     if (matches) {
-        return {
-            action: 'HELP',
-        };
+        callback(msg, 'HELP');
+        return;
     }
 
-    matches = /^(.+) when i am (.+)$/i.exec(sentence);
+    matches = /^(.+) when i am (.+)$/i.exec(msg.text);
     if (matches) {
-        return {
-            action: 'ADD-TODO',
+        callback(msg, 'ADD-TODO', {
             todo: matches[1],
             timing: matches[2],
-        };
+        });
+        return;
     }
 
-    matches = /^i am (.+)$/i.exec(sentence);
+    matches = /^i am (.+)$/i.exec(msg.text);
     if (matches) {
-        return {
-            action: 'WHAT-TO-DO',
+        callback(msg, 'WHAT-TO-DO', {
             timing: matches[1],
-        };
+        });
+        return;
     }
 
-    matches = /^done$/i.exec(sentence);
+    matches = /^done$/i.exec(msg.text);
     if (matches) {
-        return {
-            action: 'REMOVE-TODO',
-        };
+        callback(msg, 'REMOVE-TODO');
+        return;
     }
 
-    return {
-        action: 'UNKNOWN'
-    };
+    callback(msg, 'UNKNOWN');
 };
 
-bot.onText(/(.+)/, function (msg, match) {
-    var sentence = match[1];
-    var args = parseSentence(sentence);
-
-    switch (args.action) {
+var doAction = function(msg, action, args) {
+    switch (action) {
         case 'ADD-TODO':
             bot.sendMessage(msg.chat.id, 'Okay, I will remind you to ' + args.todo + ' when you are ' + args.timing + '.');
             break;
@@ -81,6 +73,10 @@ bot.onText(/(.+)/, function (msg, match) {
             bot.sendMessage(msg.chat.id, 'What?');
             break;
     }
+};
+
+bot.onText(/(.+)/, function (msg) {
+    parseSentence(msg, doAction);
 });
 
 module.exports = bot;
