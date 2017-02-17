@@ -16,7 +16,7 @@ var sender = new Sender(bot);
 
 console.log('Bot server started in the ' + process.env.NODE_ENV + ' mode');
 
-bot.onText(/(.+)/, function (msg) {
+bot.on('text', function (msg) {
     parser.parseMsg(msg, function(msg, action, args) {
         sender.sendMsg(msg, action, args);
     });
