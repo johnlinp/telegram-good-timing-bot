@@ -1,16 +1,94 @@
 var models = require('./models');
 
 module.exports = function(bot) {
+    this.sendStart = function(msg, action, args, profile) {
+        switch (process.env.BOT_LANGUAGE) {
+            case 'en-us':
+                bot.sendMessage(msg.chat.id, 'Welcome!\nType "buy some socks when i am at some store" or type /help to see the usage.');
+                return;
+            case 'zh-tw':
+                bot.sendMessage(msg.chat.id, '歡迎!\n輸入 "去雜貨店的時候要買肥皂" 或是輸入 /help 來看用法。');
+                return;
+        }
+    };
+
+    this.sendHelp = function(msg, action, args, profile) {
+        switch (process.env.BOT_LANGUAGE) {
+            case 'en-us':
+                bot.sendMessage(msg.chat.id, 'I can understand the following patterns:\n\n1. [do something] when I am [some context]\n2. I am [some context]\n3. done');
+                return;
+            case 'zh-tw':
+                bot.sendMessage(msg.chat.id, '我看得懂以下的模式:\n\n1. 我[情境]的時候要[做事情]\n2. 我[情境]了\n3. 完成');
+                return;
+        }
+    };
+
+    this.sendUnknown = function(msg, action, args, profile) {
+        switch (process.env.BOT_LANGUAGE) {
+            case 'en-us':
+                bot.sendMessage(msg.chat.id, 'What?');
+                return;
+            case 'zh-tw':
+                bot.sendMessage(msg.chat.id, '蛤?');
+                return;
+        }
+    };
+
+    this.sendAddTodo = function(msg, action, args, profile) {
+        switch (process.env.BOT_LANGUAGE) {
+            case 'en-us':
+                bot.sendMessage(msg.chat.id, 'Okay, I will remind you to ' + args.plan + ' when you are ' + args.timing + '.');
+                return;
+            case 'zh-tw':
+                bot.sendMessage(msg.chat.id, '好的，我之後會提醒你' + args.timing + '的時候要' + args.plan + '。');
+                return;
+        }
+    };
+
+    this.sendWhatToDo = function(msg, action, args, profile) {
+        switch (process.env.BOT_LANGUAGE) {
+            case 'en-us':
+                if (args.plans.length == 0) {
+                    bot.sendMessage(msg.chat.id, 'Nothing to do.');
+                } else if (args.plans.length == 1) {
+                    bot.sendMessage(msg.chat.id, 'Go ' + args.plans[0] + '.');
+                } else {
+                    bot.sendMessage(msg.chat.id, 'Go do these things:\n' + args.plans.join('\n'));
+                }
+                return;
+            case 'zh-tw':
+                if (args.plans.length == 0) {
+                    bot.sendMessage(msg.chat.id, '沒事做。');
+                } else if (args.plans.length == 1) {
+                    bot.sendMessage(msg.chat.id, '去' + args.plans[0] + '。');
+                } else {
+                    bot.sendMessage(msg.chat.id, '去做這些事:\n' + args.plans.join('\n'));
+                }
+                return;
+        }
+    };
+
+    this.sendRemoveTodo = function(msg, action, args, profile) {
+        switch (process.env.BOT_LANGUAGE) {
+            case 'en-us':
+                bot.sendMessage(msg.chat.id, 'Great job!');
+                return;
+            case 'zh-tw':
+                bot.sendMessage(msg.chat.id, '太棒了!');
+                return;
+        }
+    };
+
     this.sendSimpleResponse = function(msg, action) {
         switch (action) {
             case 'START':
-                bot.sendMessage(msg.chat.id, 'Welcome!\nType "buy some socks when i am at some store" or type /help to see the usage.');
+                this.sendStart(msg, action);
                 return true;
             case 'HELP':
-                bot.sendMessage(msg.chat.id, 'I can understand the following patterns:\n\n1. [do something] when I am [some context]\n2. I am [some context]\n3. done');
+                this.sendHelp(msg, action);
                 return true;
             case 'UNKNOWN':
-                bot.sendMessage(msg.chat.id, 'What?');
+                this.sendUnknown(msg, action);
                 return true;
             default:
                 return false;
@@ -20,19 +98,13 @@ module.exports = function(bot) {
     this.sendTimingResponse = function(msg, action, args, profile) {
         switch (action) {
             case 'ADD-TODO':
-                bot.sendMessage(msg.chat.id, 'Okay, I will remind you to ' + args.plan + ' when you are ' + args.timing + '.');
+                this.sendAddTodo(msg, action, args, profile);
                 return;
             case 'WHAT-TO-DO':
-                if (args.plans.length == 0) {
-                    bot.sendMessage(msg.chat.id, 'Nothing to do.');
-                } else if (args.plans.length == 1) {
-                    bot.sendMessage(msg.chat.id, 'Go ' + args.plans[0] + '.');
-                } else {
-                    bot.sendMessage(msg.chat.id, 'Go do these things:\n' + args.plans.join('\n'));
-                }
+                this.sendWhatToDo(msg, action, args, profile);
                 return;
             case 'REMOVE-TODO':
-                bot.sendMessage(msg.chat.id, 'Great job!');
+                this.sendRemoveTodo(msg, action, args, profile);
                 return;
         }
     };

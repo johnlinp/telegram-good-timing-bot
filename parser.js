@@ -18,11 +18,28 @@ module.exports = function() {
     };
 
     this.parseAddTodo = function(msg, callback) {
-        var matches = /^(.+) when i am (.+)$/i.exec(msg.text);
+        var matches, plan, timing;
+        switch (process.env.BOT_LANGUAGE) {
+            case 'en-us':
+                matches = /^(.+) when i am (.+)$/i.exec(msg.text);
+                if (matches) {
+                    plan = matches[1];
+                    timing = matches[2];
+                }
+                break;
+            case 'zh-tw':
+                matches = /^我(.+)的時候要(.+)$/i.exec(msg.text);
+                if (matches) {
+                    timing = matches[1];
+                    plan = matches[2];
+                }
+                break;
+        }
+
         if (matches) {
             callback(msg, 'ADD-TODO', {
-                plan: matches[1],
-                timing: matches[2],
+                plan: plan,
+                timing: timing,
             });
             return true;
         }
@@ -30,10 +47,25 @@ module.exports = function() {
     };
 
     this.parseWhatToDo = function(msg, callback) {
-        var matches = /^i am (.+)$/i.exec(msg.text);
+        var matches, timing;
+        switch (process.env.BOT_LANGUAGE) {
+            case 'en-us':
+                matches = /^i am (.+)$/i.exec(msg.text);
+                if (matches) {
+                    timing = matches[1];
+                }
+                break;
+            case 'zh-tw':
+                matches = /^我(.+)了$/i.exec(msg.text);
+                if (matches) {
+                    timing = matches[1];
+                }
+                break;
+        }
+
         if (matches) {
             callback(msg, 'WHAT-TO-DO', {
-                timing: matches[1],
+                timing: timing,
             });
             return true;
         }
@@ -41,7 +73,16 @@ module.exports = function() {
     };
 
     this.parseRemoveTodo = function(msg, callback) {
-        var matches = /^done$/i.exec(msg.text);
+        var matches;
+        switch (process.env.BOT_LANGUAGE) {
+            case 'en-us':
+                matches = /^done$/i.exec(msg.text);
+                break;
+            case 'zh-tw':
+                matches = /^完成$/i.exec(msg.text);
+                break;
+        }
+
         if (matches) {
             callback(msg, 'REMOVE-TODO');
             return true;
