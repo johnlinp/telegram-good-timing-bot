@@ -1,7 +1,7 @@
 var models = require('./models');
 
 module.exports = function(bot) {
-    this.sendStart = function(msg, action, args, profile) {
+    this.sendStart = function(msg, action, args) {
         switch (process.env.BOT_LANGUAGE) {
             case 'en-us':
                 bot.sendMessage(msg.chat.id, 'Welcome!\nType "buy some socks when i am at some store" or type /help to see the usage.');
@@ -12,7 +12,7 @@ module.exports = function(bot) {
         }
     };
 
-    this.sendHelp = function(msg, action, args, profile) {
+    this.sendHelp = function(msg, action, args) {
         switch (process.env.BOT_LANGUAGE) {
             case 'en-us':
                 bot.sendMessage(msg.chat.id, 'I can understand the following patterns:\n\n1. [do something] when I am [some context]\n2. I am [some context]\n3. done');
@@ -23,7 +23,7 @@ module.exports = function(bot) {
         }
     };
 
-    this.sendUnknown = function(msg, action, args, profile) {
+    this.sendUnknown = function(msg, action, args) {
         switch (process.env.BOT_LANGUAGE) {
             case 'en-us':
                 bot.sendMessage(msg.chat.id, 'What?');
@@ -34,7 +34,7 @@ module.exports = function(bot) {
         }
     };
 
-    this.sendAddTodo = function(msg, action, args, profile) {
+    this.sendAddTodo = function(msg, action, args) {
         switch (process.env.BOT_LANGUAGE) {
             case 'en-us':
                 bot.sendMessage(msg.chat.id, 'Okay, I will remind you to ' + args.plan + ' when you are ' + args.timing + '.');
@@ -45,7 +45,7 @@ module.exports = function(bot) {
         }
     };
 
-    this.sendWhatToDo = function(msg, action, args, profile) {
+    this.sendWhatToDo = function(msg, action, args) {
         switch (process.env.BOT_LANGUAGE) {
             case 'en-us':
                 if (args.plans.length == 0) {
@@ -68,7 +68,7 @@ module.exports = function(bot) {
         }
     };
 
-    this.sendWhatNow = function(msg, action, args, profile) {
+    this.sendWhatNow = function(msg, action, args) {
         switch (process.env.BOT_LANGUAGE) {
             case 'en-us':
                 if (args.timings.length == 0) {
@@ -91,7 +91,7 @@ module.exports = function(bot) {
         }
     };
 
-    this.sendRemoveTodo = function(msg, action, args, profile) {
+    this.sendRemoveTodo = function(msg, action, args) {
         switch (process.env.BOT_LANGUAGE) {
             case 'en-us':
                 bot.sendMessage(msg.chat.id, 'Great job!');
@@ -118,26 +118,26 @@ module.exports = function(bot) {
         }
     };
 
-    this.sendBeforeSaveResponse = function(msg, action, args, profile) {
+    this.sendBeforeSaveResponse = function(msg, action, args) {
         switch (action) {
             case 'WHAT-NOW':
-                this.sendWhatNow(msg, action, args, profile);
+                this.sendWhatNow(msg, action, args);
                 return true;
             default:
                 return false;
         }
     };
 
-    this.sendAfterSaveResponse = function(msg, action, args, profile) {
+    this.sendAfterSaveResponse = function(msg, action, args) {
         switch (action) {
             case 'ADD-TODO':
-                this.sendAddTodo(msg, action, args, profile);
+                this.sendAddTodo(msg, action, args);
                 return;
             case 'WHAT-TO-DO':
-                this.sendWhatToDo(msg, action, args, profile);
+                this.sendWhatToDo(msg, action, args);
                 return;
             case 'REMOVE-TODO':
-                this.sendRemoveTodo(msg, action, args, profile);
+                this.sendRemoveTodo(msg, action, args);
                 return;
         }
     };
@@ -222,7 +222,7 @@ module.exports = function(bot) {
                 return;
             }
 
-            if (me.sendBeforeSaveResponse(msg, action, args, profile)) {
+            if (me.sendBeforeSaveResponse(msg, action, args)) {
                 return;
             }
 
@@ -231,7 +231,7 @@ module.exports = function(bot) {
                     bot.sendMessage(msg.chat.id, 'Something went wrong...');
                     return;
                 }
-                me.sendAfterSaveResponse(msg, action, args, profile);
+                me.sendAfterSaveResponse(msg, action, args);
             });
         });
     };
