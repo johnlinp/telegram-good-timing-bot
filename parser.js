@@ -72,6 +72,24 @@ module.exports = function() {
         return false;
     };
 
+    this.parseWhatNow = function(msg, callback) {
+        var matches, timing;
+        switch (process.env.BOT_LANGUAGE) {
+            case 'en-us':
+                matches = /^what now$/i.exec(msg.text);
+                break;
+            case 'zh-tw':
+                matches = /^.*要幹嘛$/i.exec(msg.text);
+                break;
+        }
+
+        if (matches) {
+            callback(msg, 'WHAT-NOW');
+            return true;
+        }
+        return false;
+    };
+
     this.parseRemoveTodo = function(msg, callback) {
         var matches;
         switch (process.env.BOT_LANGUAGE) {
@@ -96,6 +114,7 @@ module.exports = function() {
             this.parseHelp,
             this.parseAddTodo,
             this.parseWhatToDo,
+            this.parseWhatNow,
             this.parseRemoveTodo,
         ];
 

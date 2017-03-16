@@ -68,6 +68,29 @@ module.exports = function(bot) {
         }
     };
 
+    this.sendWhatNow = function(msg, action, args, profile) {
+        switch (process.env.BOT_LANGUAGE) {
+            case 'en-us':
+                if (args.timings.length == 0) {
+                    bot.sendMessage(msg.chat.id, 'Nothing to do.');
+                } else if (args.timings.length == 1) {
+                    bot.sendMessage(msg.chat.id, 'Are you ' + args.timings[0] + '?');
+                } else {
+                    bot.sendMessage(msg.chat.id, 'What timing are you at?\n' + args.timings.join('\n'));
+                }
+                return;
+            case 'zh-tw':
+                if (args.timings.length == 0) {
+                    bot.sendMessage(msg.chat.id, '沒事做。');
+                } else if (args.timings.length == 1) {
+                    bot.sendMessage(msg.chat.id, '你' + args.timings[0] + '嗎？');
+                } else {
+                    bot.sendMessage(msg.chat.id, '你現在有任何好時機嗎？\n' + args.timings.join('\n'));
+                }
+                return;
+        }
+    };
+
     this.sendRemoveTodo = function(msg, action, args, profile) {
         switch (process.env.BOT_LANGUAGE) {
             case 'en-us':
@@ -95,7 +118,17 @@ module.exports = function(bot) {
         }
     };
 
-    this.sendTimingResponse = function(msg, action, args, profile) {
+    this.sendBeforeSaveResponse = function(msg, action, args, profile) {
+        switch (action) {
+            case 'WHAT-NOW':
+                this.sendWhatNow(msg, action, args, profile);
+                return true;
+            default:
+                return false;
+        }
+    };
+
+    this.sendAfterSaveResponse = function(msg, action, args, profile) {
         switch (action) {
             case 'ADD-TODO':
                 this.sendAddTodo(msg, action, args, profile);
@@ -136,6 +169,14 @@ module.exports = function(bot) {
                 });
                 args.plans = targetTodoList.map(function(todo) {
                     return todo.plan;
+                });
+                return true;
+            case 'WHAT-NOW':
+                args.timings = [];
+                profile.todoList.forEach(function(todo) {
+                    if (args.timings.indexOf(todo.timing) === -1) {
+                        args.timings.push(todo.timing);
+                    }
                 });
                 return true;
             case 'REMOVE-TODO':
@@ -181,12 +222,16 @@ module.exports = function(bot) {
                 return;
             }
 
+            if (me.sendBeforeSaveResponse(msg, action, args, profile)) {
+                return;
+            }
+
             profile.save(function(err) {
                 if (err) {
                     bot.sendMessage(msg.chat.id, 'Something went wrong...');
                     return;
                 }
-                me.sendTimingResponse(msg, action, args, profile);
+                me.sendAfterSaveResponse(msg, action, args, profile);
             });
         });
     };
