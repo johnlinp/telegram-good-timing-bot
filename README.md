@@ -17,3 +17,17 @@ Good timings can be:
 - "when i want to read"
 
 and more, whatever you want.
+
+## Unit Tests
+
+To run unit tests, you have to install `mocha` first:
+
+```
+sudo npm install -g mocha
+```
+
+And then:
+
+```
+npm test
+```
