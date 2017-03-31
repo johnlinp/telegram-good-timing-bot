@@ -62,7 +62,8 @@ describe('parser.js', function() {
 describe('sender.js', function() {
     var Sender = require('./sender');
     var bot = {sendMessage: sinon.spy()};
-    var sender = new Sender(bot);
+    var models = {};
+    var sender = new Sender(bot, models);
     var msg = {chat: {id: 0}};
 
     it('send /start', function() {

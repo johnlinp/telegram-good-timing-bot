@@ -1,6 +1,4 @@
-var models = require('./models');
-
-module.exports = function(bot) {
+module.exports = function(bot, models) {
     this.sendStart = function(msg, action, args) {
         switch (process.env.BOT_LANGUAGE) {
             case 'en-us':
