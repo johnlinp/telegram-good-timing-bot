@@ -1,4 +1,4 @@
-# Good Timing Bot
+# Good Timing Bot [![Build Status](https://travis-ci.org/johnlinp/telegram-good-timing-bot.svg?branch=master)](https://travis-ci.org/johnlinp/telegram-good-timing-bot)
 
 It is a [Telegram](https://telegram.org/) Bot to help you find a good timing to do things.
 
