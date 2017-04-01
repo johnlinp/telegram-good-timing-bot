@@ -17,6 +17,8 @@ var sender = new Sender(bot, models);
 
 console.log('Bot server started in the ' + process.env.NODE_ENV + ' mode');
 
+models.connect();
+
 bot.on('text', function (msg) {
     parser.parseMsg(msg, function(msg, action, args) {
         sender.sendMsg(msg, action, args);

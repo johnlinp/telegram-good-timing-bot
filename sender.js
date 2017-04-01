@@ -201,8 +201,7 @@ module.exports = function(bot, models) {
             return;
         }
 
-        models.Profile.findOne({userId: msg.from.id})
-                .exec(function(err, profile) {
+        models.Profile.findOne({userId: msg.from.id}, function(err, profile) {
             if (err) {
                 bot.sendMessage(msg.chat.id, 'Something went wrong...');
                 return;
