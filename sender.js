@@ -1,103 +1,50 @@
+var i18n = require("i18n");
+
+i18n.configure({
+    directory: __dirname + '/locales',
+});
+
+i18n.setLocale(process.env.BOT_LANGUAGE);
+
 module.exports = function(bot, models) {
     this.sendStart = function(msg, action, args) {
-        switch (process.env.BOT_LANGUAGE) {
-            case 'en-us':
-                bot.sendMessage(msg.chat.id, 'Welcome!\nType "buy some socks when i am at some store" or type /help to see the usage.');
-                return;
-            case 'zh-tw':
-                bot.sendMessage(msg.chat.id, '歡迎!\n輸入 "去雜貨店的時候要買肥皂" 或是輸入 /help 來看用法。');
-                return;
-        }
+        bot.sendMessage(msg.chat.id, i18n.__('welcome'));
     };
 
     this.sendHelp = function(msg, action, args) {
-        switch (process.env.BOT_LANGUAGE) {
-            case 'en-us':
-                bot.sendMessage(msg.chat.id, 'I can understand the following patterns:\n\n1. [do something] when I am [some context]\n2. I am [some context]\n3. done');
-                return;
-            case 'zh-tw':
-                bot.sendMessage(msg.chat.id, '我看得懂以下的模式:\n\n1. 我[情境]的時候要[做事情]\n2. 我[情境]了\n3. 完成');
-                return;
-        }
+        bot.sendMessage(msg.chat.id, i18n.__('help'));
     };
 
     this.sendUnknown = function(msg, action, args) {
-        switch (process.env.BOT_LANGUAGE) {
-            case 'en-us':
-                bot.sendMessage(msg.chat.id, 'What?');
-                return;
-            case 'zh-tw':
-                bot.sendMessage(msg.chat.id, '蛤?');
-                return;
-        }
+        bot.sendMessage(msg.chat.id, i18n.__('what'));
     };
 
     this.sendAddTodo = function(msg, action, args) {
-        switch (process.env.BOT_LANGUAGE) {
-            case 'en-us':
-                bot.sendMessage(msg.chat.id, 'Okay, I will remind you to ' + args.plan + ' when you are ' + args.timing + '.');
-                return;
-            case 'zh-tw':
-                bot.sendMessage(msg.chat.id, '好的，我之後會提醒你' + args.timing + '的時候要' + args.plan + '。');
-                return;
-        }
+        bot.sendMessage(msg.chat.id, i18n.__('remind', args));
     };
 
     this.sendWhatToDo = function(msg, action, args) {
-        switch (process.env.BOT_LANGUAGE) {
-            case 'en-us':
-                if (args.plans.length == 0) {
-                    bot.sendMessage(msg.chat.id, 'Nothing to do.');
-                } else if (args.plans.length == 1) {
-                    bot.sendMessage(msg.chat.id, 'Go ' + args.plans[0] + '.');
-                } else {
-                    bot.sendMessage(msg.chat.id, 'Go do these things:\n' + args.plans.join('\n'));
-                }
-                return;
-            case 'zh-tw':
-                if (args.plans.length == 0) {
-                    bot.sendMessage(msg.chat.id, '沒事做。');
-                } else if (args.plans.length == 1) {
-                    bot.sendMessage(msg.chat.id, '去' + args.plans[0] + '。');
-                } else {
-                    bot.sendMessage(msg.chat.id, '去做這些事:\n' + args.plans.join('\n'));
-                }
-                return;
+        if (args.plans.length == 0) {
+            bot.sendMessage(msg.chat.id, i18n.__('do-nothing'));
+        } else if (args.plans.length == 1) {
+            bot.sendMessage(msg.chat.id, i18n.__('do-single-thing', args.plans[0]));
+        } else {
+            bot.sendMessage(msg.chat.id, i18n.__('do-multiple-things', args.plans.join('\n')));
         }
     };
 
     this.sendWhatNow = function(msg, action, args) {
-        switch (process.env.BOT_LANGUAGE) {
-            case 'en-us':
-                if (args.timings.length == 0) {
-                    bot.sendMessage(msg.chat.id, 'Nothing to do.');
-                } else if (args.timings.length == 1) {
-                    bot.sendMessage(msg.chat.id, 'Are you ' + args.timings[0] + '?');
-                } else {
-                    bot.sendMessage(msg.chat.id, 'What timing are you at?\n' + args.timings.join('\n'));
-                }
-                return;
-            case 'zh-tw':
-                if (args.timings.length == 0) {
-                    bot.sendMessage(msg.chat.id, '沒事做。');
-                } else if (args.timings.length == 1) {
-                    bot.sendMessage(msg.chat.id, '你' + args.timings[0] + '嗎？');
-                } else {
-                    bot.sendMessage(msg.chat.id, '你現在有任何好時機嗎？\n' + args.timings.join('\n'));
-                }
-                return;
+        if (args.timings.length == 0) {
+            bot.sendMessage(msg.chat.id, i18n.__('do-nothing'));
+        } else if (args.timings.length == 1) {
+            bot.sendMessage(msg.chat.id, i18n.__('ask-single-timing', args.timings[0]));
+        } else {
+            bot.sendMessage(msg.chat.id, i18n.__('ask-multiple-timings', args.timings.join('\n')));
         }
     };
 
     this.sendRemoveTodo = function(msg, action, args) {
-        switch (process.env.BOT_LANGUAGE) {
-            case 'en-us':
-                bot.sendMessage(msg.chat.id, 'Great job!');
-                return;
-            case 'zh-tw':
-                bot.sendMessage(msg.chat.id, '太棒了!');
-                return;
-        }
+        bot.sendMessage(msg.chat.id, i18n.__('great'));
     };
 
     this.sendSimpleResponse = function(msg, action) {
@@ -145,14 +92,14 @@ module.exports = function(bot, models) {
             case 'ADD-TODO':
                 profile.currTiming = null;
                 if (profile.todoList.length >= 100) {
-                    bot.sendMessage(msg.chat.id, 'Too many things to do!');
+                    bot.sendMessage(msg.chat.id, i18n.__('too-many-things'));
                     return false;
                 }
                 var sameTodo = profile.todoList.filter(function(todo) {
                     return (todo.timing == args.timing && todo.plan == args.plan);
                 });
                 if (sameTodo.length != 0) {
-                    bot.sendMessage(msg.chat.id, 'You already told me that.');
+                    bot.sendMessage(msg.chat.id, i18n.__('already-told'));
                     return false;
                 }
                 profile.todoList.push({
@@ -179,7 +126,7 @@ module.exports = function(bot, models) {
                 return true;
             case 'REMOVE-TODO':
                 if (!profile.currTiming) {
-                    bot.sendMessage(msg.chat.id, 'What is your timing now?');
+                    bot.sendMessage(msg.chat.id, i18n.__('what-timing'));
                     return false;
                 }
                 profile.todoList = profile.todoList.filter(function(todo) {
@@ -203,7 +150,7 @@ module.exports = function(bot, models) {
 
         models.Profile.findOne({userId: msg.from.id}, function(err, profile) {
             if (err) {
-                bot.sendMessage(msg.chat.id, 'Something went wrong...');
+                bot.sendMessage(msg.chat.id, i18n.__('something-wrong'));
                 return;
             }
 
@@ -225,7 +172,7 @@ module.exports = function(bot, models) {
 
             profile.save(function(err) {
                 if (err) {
-                    bot.sendMessage(msg.chat.id, 'Something went wrong...');
+                    bot.sendMessage(msg.chat.id, i18n.__('something-wrong'));
                     return;
                 }
                 me.sendAfterSaveResponse(msg, action, args);

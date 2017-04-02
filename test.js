@@ -65,6 +65,7 @@ describe('sender.js', function() {
     var models = require('./models');
     var sender = new Sender(bot, models);
     var msg = {chat: {id: 0}, from: {id: 0}};
+    var i18n = require("i18n");
     var sandbox;
 
     beforeEach(function() {
@@ -77,12 +78,12 @@ describe('sender.js', function() {
 
     it('send /start', function() {
         sender.sendMsg(msg, 'START');
-        chai.assert(bot.sendMessage.calledWith(msg.chat.id, 'Welcome!\nType "buy some socks when i am at some store" or type /help to see the usage.'));
+        chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('welcome')));
     });
 
     it('send /help', function() {
         sender.sendMsg(msg, 'HELP');
-        chai.assert(bot.sendMessage.calledWith(msg.chat.id, 'I can understand the following patterns:\n\n1. [do something] when I am [some context]\n2. I am [some context]\n3. done'));
+        chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('help')));
     });
 
     it('send add todo', function() {
@@ -100,7 +101,7 @@ describe('sender.js', function() {
         sandbox.stub(profile, 'save').yields(null);
 
         sender.sendMsg(msg, 'ADD-TODO', args);
-        chai.assert(bot.sendMessage.calledWith(msg.chat.id, 'Okay, I will remind you to ' + args.plan + ' when you are ' + args.timing + '.'));
+        chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('remind', args)));
         chai.assert(profile.todoList.length === 1);
         chai.assert(profile.todoList[0].timing === args.timing);
         chai.assert(profile.todoList[0].plan === args.plan);
@@ -120,7 +121,7 @@ describe('sender.js', function() {
         sandbox.stub(profile, 'save').yields(null);
 
         sender.sendMsg(msg, 'WHAT-TO-DO', args);
-        chai.assert(bot.sendMessage.calledWith(msg.chat.id, 'Nothing to do.'));
+        chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('do-nothing')));
         chai.assert(profile.currTiming === args.timing);
     });
 
@@ -143,7 +144,7 @@ describe('sender.js', function() {
         sandbox.stub(profile, 'save').yields(null);
 
         sender.sendMsg(msg, 'WHAT-TO-DO', args);
-        chai.assert(bot.sendMessage.calledWith(msg.chat.id, 'Go ' + profile.todoList[0].plan + '.'));
+        chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('do-single-thing', profile.todoList[0].plan)));
         chai.assert(profile.currTiming === args.timing);
     });
 
@@ -188,7 +189,7 @@ describe('sender.js', function() {
         sandbox.stub(profile, 'save').yields(null);
 
         sender.sendMsg(msg, 'WHAT-TO-DO', args);
-        chai.assert(bot.sendMessage.calledWith(msg.chat.id, 'Go do these things:\n' + plans.join('\n')));
+        chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('do-multiple-things', plans.join('\n'))));
         chai.assert(profile.currTiming === args.timing);
     });
 
@@ -220,7 +221,7 @@ describe('sender.js', function() {
         sandbox.stub(profile, 'save').yields(null);
 
         sender.sendMsg(msg, 'REMOVE-TODO');
-        chai.assert(bot.sendMessage.calledWith(msg.chat.id, 'Great job!'));
+        chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('great')));
         chai.assert(profile.todoList.length === 1);
         chai.assert(profile.todoList[0].timing === 'tired');
         chai.assert(profile.todoList[0].plan === 'sleep');
@@ -236,7 +237,7 @@ describe('sender.js', function() {
         sandbox.stub(models.Profile, 'findOne').yields(null, profile);
 
         sender.sendMsg(msg, 'WHAT-NOW');
-        chai.assert(bot.sendMessage.calledWith(msg.chat.id, 'Nothing to do.'));
+        chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('do-nothing')));
     });
 
     it('send what now - single', function() {
@@ -254,7 +255,7 @@ describe('sender.js', function() {
         sandbox.stub(models.Profile, 'findOne').yields(null, profile);
 
         sender.sendMsg(msg, 'WHAT-NOW');
-        chai.assert(bot.sendMessage.calledWith(msg.chat.id, 'Are you ' + profile.todoList[0].timing + '?'));
+        chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('ask-single-timing', profile.todoList[0].timing)));
     });
 
     it('send what now - multiple', function() {
@@ -289,11 +290,11 @@ describe('sender.js', function() {
         sandbox.stub(models.Profile, 'findOne').yields(null, profile);
 
         sender.sendMsg(msg, 'WHAT-NOW');
-        chai.assert(bot.sendMessage.calledWith(msg.chat.id, 'What timing are you at?\n' + timings.join('\n')));
+        chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('ask-multiple-timings', timings.join('\n'))));
     });
 
     it('send unknown', function() {
         sender.sendMsg(msg, 'UNKNOWN');
-        chai.assert(bot.sendMessage.calledWith(msg.chat.id, 'What?'));
+        chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('what')));
     });
 });

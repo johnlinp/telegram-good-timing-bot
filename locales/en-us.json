@@ -1,0 +1,16 @@
+{
+	"already-told": "You already told me that.",
+	"ask-multiple-timings": "What timing are you at?\n%s",
+	"ask-single-timing": "Are you %s?",
+	"do-multiple-things": "Go do these things:\n%s",
+	"do-nothing": "Nothing to do.",
+	"do-single-thing": "Go %s.",
+	"great": "Great job!",
+	"help": "I can understand the following patterns:\n\n1. [do something] when I am [some context]\n2. I am [some context]\n3. done",
+	"remind": "Okay, I will remind you to {{ plan }} when you are {{ timing }}.",
+	"something-wrong": "Something went wrong...",
+	"welcome": "Welcome!\nType \"buy some socks when i am at some store\" or type /help to see the usage.",
+	"what": "What?",
+	"what-timing": "What is your timing now?",
+	"too-many-things": "Too many things to do!"
+}
