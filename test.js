@@ -235,6 +235,7 @@ describe('sender.js', function() {
         });
 
         sandbox.stub(models.Profile, 'findOne').yields(null, profile);
+        sandbox.stub(profile, 'save').yields(null);
 
         sender.sendMsg(msg, 'WHAT-NOW');
         chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('do-nothing')));
@@ -253,6 +254,7 @@ describe('sender.js', function() {
         });
 
         sandbox.stub(models.Profile, 'findOne').yields(null, profile);
+        sandbox.stub(profile, 'save').yields(null);
 
         sender.sendMsg(msg, 'WHAT-NOW');
         chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('ask-single-timing', profile.todoList[0].timing)));
@@ -288,6 +290,7 @@ describe('sender.js', function() {
         ];
 
         sandbox.stub(models.Profile, 'findOne').yields(null, profile);
+        sandbox.stub(profile, 'save').yields(null);
 
         sender.sendMsg(msg, 'WHAT-NOW');
         chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('ask-multiple-timings', timings.join('\n'))));

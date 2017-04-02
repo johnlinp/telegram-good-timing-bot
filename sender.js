@@ -63,16 +63,6 @@ module.exports = function(bot, models) {
         }
     };
 
-    this.sendBeforeSaveResponse = function(msg, action, args) {
-        switch (action) {
-            case 'WHAT-NOW':
-                this.sendWhatNow(msg, action, args);
-                return true;
-            default:
-                return false;
-        }
-    };
-
     this.sendAfterSaveResponse = function(msg, action, args) {
         switch (action) {
             case 'ADD-TODO':
@@ -83,6 +73,9 @@ module.exports = function(bot, models) {
                 return;
             case 'REMOVE-TODO':
                 this.sendRemoveTodo(msg, action, args);
+                return;
+            case 'WHAT-NOW':
+                this.sendWhatNow(msg, action, args);
                 return;
         }
     };
@@ -134,6 +127,9 @@ module.exports = function(bot, models) {
                 });
                 profile.currTiming = null;
                 return true;
+            case 'WHAT-NOW':
+                profile.currTiming = null;
+                return true;
             default:
                 return false;
         }
@@ -163,10 +159,6 @@ module.exports = function(bot, models) {
             }
 
             if (!me.updateProfileAndArgs(msg, action, args, profile)) {
-                return;
-            }
-
-            if (me.sendBeforeSaveResponse(msg, action, args)) {
                 return;
             }
 
