@@ -41,12 +41,33 @@ describe('parser.js', function() {
         chai.assert(spy.calledWith(msg, 'WHAT-NOW'));
     });
 
-    it('parse remove todo', function() {
+    it('parse done', function() {
         var spy = sinon.spy();
         var msg = {text: 'done'};
 
         parser.parseMsg(msg, spy);
-        chai.assert(spy.calledWith(msg, 'REMOVE-TODO'));
+        chai.assert(spy.calledWith(msg, 'DONE'));
+    });
+
+    it('parse remove todo - keyword', function() {
+        var spy = sinon.spy();
+        var msg = {text: 'about chicken'};
+
+        parser.parseMsg(msg, spy);
+        chai.assert(spy.calledWith(msg, 'REMOVE-TODO', {
+            removeAll: false,
+            removeKeyword: 'chicken',
+        }));
+    });
+
+    it('parse remove todo - all', function() {
+        var spy = sinon.spy();
+        var msg = {text: 'all'};
+
+        parser.parseMsg(msg, spy);
+        chai.assert(spy.calledWith(msg, 'REMOVE-TODO', {
+            removeAll: true,
+        }));
     });
 
     it('parse unknown', function() {
@@ -193,10 +214,35 @@ describe('sender.js', function() {
         chai.assert(profile.currTiming === args.timing);
     });
 
-    it('send remove todo', function() {
+    it('send done - one todo', function() {
+        var currTiming = 'hungry';
         var profile = new models.Profile({
             userId: 0,
-            currTiming: 'hungry',
+            currTiming: currTiming,
+            todoList: [
+                {
+                    timing: 'hungry',
+                    plan: 'eat noodles',
+                },
+                {
+                    timing: 'tired',
+                    plan: 'sleep',
+                },
+            ],
+        });
+
+        sandbox.stub(models.Profile, 'findOne').yields(null, profile);
+        sandbox.stub(profile, 'save').yields(null);
+
+        sender.sendMsg(msg, 'DONE');
+        chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('great')));
+    });
+
+    it('send done - many todos', function() {
+        var currTiming = 'hungry';
+        var profile = new models.Profile({
+            userId: 0,
+            currTiming: currTiming,
             todoList: [
                 {
                     timing: 'hungry',
@@ -220,11 +266,180 @@ describe('sender.js', function() {
         sandbox.stub(models.Profile, 'findOne').yields(null, profile);
         sandbox.stub(profile, 'save').yields(null);
 
-        sender.sendMsg(msg, 'REMOVE-TODO');
+        sender.sendMsg(msg, 'DONE');
+        chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('whats-been-done')));
+    });
+
+    it('send done - no curr timing', function() {
+        var profile = new models.Profile({
+            userId: 0,
+            currTiming: null,
+            todoList: [
+                {
+                    timing: 'hungry',
+                    plan: 'eat noodles',
+                },
+                {
+                    timing: 'tired',
+                    plan: 'sleep',
+                },
+            ],
+        });
+
+        sandbox.stub(models.Profile, 'findOne').yields(null, profile);
+        sandbox.stub(profile, 'save').yields(null);
+
+        sender.sendMsg(msg, 'DONE');
+        chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('what-timing')));
+    });
+
+    it('send remove todo - single', function() {
+        var currTiming = 'hungry';
+        var profile = new models.Profile({
+            userId: 0,
+            currTiming: currTiming,
+            todoList: [
+                {
+                    timing: 'hungry',
+                    plan: 'eat noodles',
+                },
+                {
+                    timing: 'hungry',
+                    plan: 'eat chicken',
+                },
+                {
+                    timing: 'hungry',
+                    plan: 'eat soup',
+                },
+                {
+                    timing: 'tired',
+                    plan: 'sleep',
+                },
+            ],
+        });
+        var args = {
+            removeAll: false,
+            removeKeyword: 'noodles',
+        };
+
+        sandbox.stub(models.Profile, 'findOne').yields(null, profile);
+        sandbox.stub(profile, 'save').yields(null);
+
+        sender.sendMsg(msg, 'REMOVE-TODO', args);
+        chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('removed-single', 'eat noodles')));
+        chai.assert(profile.todoList.length === 3);
+    });
+
+    it('send remove todo - multiple', function() {
+        var currTiming = 'hungry';
+        var profile = new models.Profile({
+            userId: 0,
+            currTiming: currTiming,
+            todoList: [
+                {
+                    timing: 'hungry',
+                    plan: 'eat noodles',
+                },
+                {
+                    timing: 'hungry',
+                    plan: 'eat chicken rice',
+                },
+                {
+                    timing: 'hungry',
+                    plan: 'eat chicken soup',
+                },
+                {
+                    timing: 'tired',
+                    plan: 'sleep',
+                },
+            ],
+        });
+        var args = {
+            removeAll: false,
+            removeKeyword: 'chicken',
+        };
+
+        sandbox.stub(models.Profile, 'findOne').yields(null, profile);
+        sandbox.stub(profile, 'save').yields(null);
+
+        sender.sendMsg(msg, 'REMOVE-TODO', args);
+        chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('removed-multiple', 'eat chicken rice\neat chicken soup')));
+        chai.assert(profile.todoList.length === 2);
+    });
+
+    it('send remove todo - all', function() {
+        var currTiming = 'hungry';
+        var profile = new models.Profile({
+            userId: 0,
+            currTiming: currTiming,
+            todoList: [
+                {
+                    timing: 'hungry',
+                    plan: 'eat noodles',
+                },
+                {
+                    timing: 'hungry',
+                    plan: 'eat chicken',
+                },
+                {
+                    timing: 'hungry',
+                    plan: 'eat soup',
+                },
+                {
+                    timing: 'tired',
+                    plan: 'sleep',
+                },
+            ],
+        });
+        var args = {
+            removeAll: true,
+        };
+
+        sandbox.stub(models.Profile, 'findOne').yields(null, profile);
+        sandbox.stub(profile, 'save').yields(null);
+
+        sender.sendMsg(msg, 'REMOVE-TODO', args);
         chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('great')));
         chai.assert(profile.todoList.length === 1);
         chai.assert(profile.todoList[0].timing === 'tired');
         chai.assert(profile.todoList[0].plan === 'sleep');
+    });
+
+    it('send remove todo - none', function() {
+        var currTiming = 'hungry';
+        var profile = new models.Profile({
+            userId: 0,
+            currTiming: currTiming,
+            todoList: [
+                {
+                    timing: 'hungry',
+                    plan: 'eat noodles',
+                },
+                {
+                    timing: 'hungry',
+                    plan: 'eat chicken',
+                },
+                {
+                    timing: 'hungry',
+                    plan: 'eat soup',
+                },
+                {
+                    timing: 'tired',
+                    plan: 'sleep',
+                },
+            ],
+        });
+        var args = {
+            removeAll: false,
+            removeKeyword: 'sleep',
+        };
+
+        sandbox.stub(models.Profile, 'findOne').yields(null, profile);
+        sandbox.stub(profile, 'save').yields(null);
+
+        sender.sendMsg(msg, 'REMOVE-TODO', args);
+        chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('removed-none', args.removeKeyword)));
+        chai.assert(profile.todoList.length === 4);
     });
 
     it('send what now - empty', function() {

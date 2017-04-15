@@ -12,5 +12,9 @@
 	"welcome": "Welcome!\nType \"buy some socks when i am at some store\" or type /help to see the usage.",
 	"what": "What?",
 	"what-timing": "What is your timing now?",
-	"too-many-things": "Too many things to do!"
+	"too-many-things": "Too many things to do!",
+	"whats-been-done": "What's been done?",
+	"removed-single": "Great, I am removing %s from your list.",
+	"removed-multiple": "Great, I am removing those things from your list:\n%s",
+	"removed-none": "Uh, you have no todo with keyword \"%s\"."
 }

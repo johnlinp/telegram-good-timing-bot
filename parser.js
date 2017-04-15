@@ -90,7 +90,7 @@ module.exports = function() {
         return false;
     };
 
-    this.parseRemoveTodo = function(msg, callback) {
+    this.parseDone = function(msg, callback) {
         var matches;
         switch (process.env.BOT_LANGUAGE) {
             case 'en-us':
@@ -102,9 +102,54 @@ module.exports = function() {
         }
 
         if (matches) {
-            callback(msg, 'REMOVE-TODO');
+            callback(msg, 'DONE');
             return true;
         }
+        return false;
+    };
+
+    this.parseRemoveTodo = function(msg, callback) {
+        var matches, keyword;
+
+        switch (process.env.BOT_LANGUAGE) {
+            case 'en-us':
+                matches = /^all$/i.exec(msg.text);
+                break;
+            case 'zh-tw':
+                matches = /^全部$/i.exec(msg.text);
+                break;
+        }
+
+        if (matches) {
+            callback(msg, 'REMOVE-TODO', {
+                removeAll: true,
+            });
+            return true;
+        }
+
+        switch (process.env.BOT_LANGUAGE) {
+            case 'en-us':
+                matches = /^about (.*)$/i.exec(msg.text);
+                if (matches) {
+                    keyword = matches[1];
+                }
+                break;
+            case 'zh-tw':
+                matches = /^(.*)那件$/i.exec(msg.text);
+                if (matches) {
+                    keyword = matches[1];
+                }
+                break;
+        }
+
+        if (matches) {
+            callback(msg, 'REMOVE-TODO', {
+                removeAll: false,
+                removeKeyword: keyword,
+            });
+            return true;
+        }
+
         return false;
     };
 
@@ -115,6 +160,7 @@ module.exports = function() {
             this.parseAddTodo,
             this.parseWhatToDo,
             this.parseWhatNow,
+            this.parseDone,
             this.parseRemoveTodo,
         ];
 

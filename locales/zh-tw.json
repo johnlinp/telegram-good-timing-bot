@@ -12,5 +12,9 @@
 	"welcome": "歡迎!\n輸入 \"去雜貨店的時候要買肥皂\" 或是輸入 /help 來看用法。",
 	"what": "蛤?",
 	"what-timing": "你現在有什麼好時機嗎？",
-    "too-many-things": "太多事要做了!"
+	"too-many-things": "太多事要做了!",
+	"whats-been-done": "你完成了哪件事？",
+	"removed-single": "太棒了，我劃掉 %s 這件事了。",
+	"removed-multiple": "太棒了，我把這幾件事都劃掉了：:\n%s",
+	"removed-none": "呃，你沒有和 \"%s\" 有關的事情吧。"
 }

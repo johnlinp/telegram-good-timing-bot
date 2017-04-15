@@ -43,8 +43,24 @@ module.exports = function(bot, models) {
         }
     };
 
+    this.sendDone = function(msg, action, args) {
+        if (args.done) {
+            bot.sendMessage(msg.chat.id, i18n.__('great'));
+        } else {
+            bot.sendMessage(msg.chat.id, i18n.__('whats-been-done'));
+        }
+    };
+
     this.sendRemoveTodo = function(msg, action, args) {
-        bot.sendMessage(msg.chat.id, i18n.__('great'));
+        if (args.removeAll) {
+            bot.sendMessage(msg.chat.id, i18n.__('great'));
+        } else if (args.removedPlans.length == 0) {
+            bot.sendMessage(msg.chat.id, i18n.__('removed-none', args.removeKeyword));
+        } else if (args.removedPlans.length == 1) {
+            bot.sendMessage(msg.chat.id, i18n.__('removed-single', args.removedPlans[0]));
+        } else {
+            bot.sendMessage(msg.chat.id, i18n.__('removed-multiple', args.removedPlans.join('\n')));
+        }
     };
 
     this.sendSimpleResponse = function(msg, action) {
@@ -70,6 +86,9 @@ module.exports = function(bot, models) {
                 return;
             case 'WHAT-TO-DO':
                 this.sendWhatToDo(msg, action, args);
+                return;
+            case 'DONE':
+                this.sendDone(msg, action, args);
                 return;
             case 'REMOVE-TODO':
                 this.sendRemoveTodo(msg, action, args);
@@ -117,15 +136,45 @@ module.exports = function(bot, models) {
                     }
                 });
                 return true;
+            case 'DONE':
+                if (!profile.currTiming) {
+                    bot.sendMessage(msg.chat.id, i18n.__('what-timing'));
+                    return false;
+                }
+                var relevantTodoList = profile.todoList.filter(function(todo) {
+                    return (todo.timing == profile.currTiming);
+                });
+                if (relevantTodoList.length > 1) {
+                    args.done = false;
+                } else {
+                    args.done = true;
+                    profile.todoList = profile.todoList.filter(function(todo) {
+                        return (todo.timing != profile.currTiming);
+                    });
+                    profile.currTiming = null;
+                }
+                return true;
             case 'REMOVE-TODO':
                 if (!profile.currTiming) {
                     bot.sendMessage(msg.chat.id, i18n.__('what-timing'));
                     return false;
                 }
-                profile.todoList = profile.todoList.filter(function(todo) {
-                    return (todo.timing != profile.currTiming);
-                });
-                profile.currTiming = null;
+                if (args.removeAll) {
+                    profile.todoList = profile.todoList.filter(function(todo) {
+                        return (todo.timing != profile.currTiming);
+                    });
+                    profile.currTiming = null;
+                } else {
+                    args.removedPlans = [];
+                    profile.todoList = profile.todoList.filter(function(todo) {
+                        var isRelevant = (todo.timing == profile.currTiming &&
+                                todo.plan.toLowerCase().indexOf(args.removeKeyword.toLowerCase()) !== -1);
+                        if (isRelevant) {
+                            args.removedPlans.push(todo.plan);
+                        }
+                        return !isRelevant;
+                    });
+                }
                 return true;
             case 'WHAT-NOW':
                 profile.currTiming = null;
@@ -151,7 +200,7 @@ module.exports = function(bot, models) {
             }
 
             if (!profile) {
-                var profile = new models.Profile({
+                profile = new models.Profile({
                     userId: msg.from.id,
                     currTiming: null,
                     todoList: [],
