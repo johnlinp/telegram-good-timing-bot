@@ -96,6 +96,9 @@ module.exports = function(bot, models) {
             case 'WHAT-NOW':
                 this.sendWhatNow(msg, action, args);
                 return;
+            case 'WHAT-ELSE':
+                this.sendWhatToDo(msg, action, args); // same as sendWhatToDo
+                return;
         }
     };
 
@@ -134,6 +137,14 @@ module.exports = function(bot, models) {
                     if (args.timings.indexOf(todo.timing) === -1) {
                         args.timings.push(todo.timing);
                     }
+                });
+                return true;
+            case 'WHAT-ELSE':
+                var targetTodoList = profile.todoList.filter(function(todo) {
+                    return (todo.timing == profile.currTiming);
+                });
+                args.plans = targetTodoList.map(function(todo) {
+                    return todo.plan;
                 });
                 return true;
             case 'DONE':

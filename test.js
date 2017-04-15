@@ -70,6 +70,14 @@ describe('parser.js', function() {
         }));
     });
 
+    it('parse what else', function() {
+        var spy = sinon.spy();
+        var msg = {text: 'what else'};
+
+        parser.parseMsg(msg, spy);
+        chai.assert(spy.calledWith(msg, 'WHAT-ELSE'));
+    });
+
     it('parse unknown', function() {
         var spy = sinon.spy();
         var msg = {text: 'hello'};
@@ -509,6 +517,38 @@ describe('sender.js', function() {
 
         sender.sendMsg(msg, 'WHAT-NOW');
         chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('ask-multiple-timings', timings.join('\n'))));
+    });
+
+    it('send what else', function() {
+        var currTiming = 'thirsty';
+        var profile = new models.Profile({
+            userId: 0,
+            currTiming: currTiming,
+            todoList: [
+                {
+                    timing: 'hungry',
+                    plan: 'eat chicken',
+                },
+                {
+                    timing: 'hungry',
+                    plan: 'eat soup',
+                },
+                {
+                    timing: 'thirsty',
+                    plan: 'drink',
+                },
+                {
+                    timing: 'tired',
+                    plan: 'sleep',
+                },
+            ],
+        });
+
+        sandbox.stub(models.Profile, 'findOne').yields(null, profile);
+        sandbox.stub(profile, 'save').yields(null);
+
+        sender.sendMsg(msg, 'WHAT-ELSE');
+        chai.assert(bot.sendMessage.calledWith(msg.chat.id, i18n.__('do-single-thing', 'drink')));
     });
 
     it('send unknown', function() {

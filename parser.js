@@ -73,7 +73,7 @@ module.exports = function() {
     };
 
     this.parseWhatNow = function(msg, callback) {
-        var matches, timing;
+        var matches;
         switch (process.env.BOT_LANGUAGE) {
             case 'en-us':
                 matches = /^what now$/i.exec(msg.text);
@@ -85,6 +85,24 @@ module.exports = function() {
 
         if (matches) {
             callback(msg, 'WHAT-NOW');
+            return true;
+        }
+        return false;
+    };
+
+    this.parseWhatElse = function(msg, callback) {
+        var matches;
+        switch (process.env.BOT_LANGUAGE) {
+            case 'en-us':
+                matches = /^what else$/i.exec(msg.text);
+                break;
+            case 'zh-tw':
+                matches = /^還有.*$/i.exec(msg.text);
+                break;
+        }
+
+        if (matches) {
+            callback(msg, 'WHAT-ELSE');
             return true;
         }
         return false;
@@ -160,6 +178,7 @@ module.exports = function() {
             this.parseAddTodo,
             this.parseWhatToDo,
             this.parseWhatNow,
+            this.parseWhatElse,
             this.parseDone,
             this.parseRemoveTodo,
         ];
