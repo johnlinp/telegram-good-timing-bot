@@ -207,6 +207,7 @@ module.exports = function(bot, models) {
         models.Profile.findOne({userId: msg.from.id}, function(err, profile) {
             if (err) {
                 bot.sendMessage(msg.chat.id, i18n.__('something-wrong'));
+                console.error('failed to find profile:', err);
                 return;
             }
 
@@ -225,6 +226,7 @@ module.exports = function(bot, models) {
             profile.save(function(err) {
                 if (err) {
                     bot.sendMessage(msg.chat.id, i18n.__('something-wrong'));
+                    console.error('failed to save profile:', err);
                     return;
                 }
                 me.sendAfterSaveResponse(msg, action, args);
