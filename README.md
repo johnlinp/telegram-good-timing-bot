@@ -18,6 +18,23 @@ Good timings can be:
 
 and more, whatever you want.
 
+
+## How to Run
+
+To run the server, you have to prepare the `.env` file:
+
+```
+cp .env.example .env
+vi .env # to edit
+```
+
+And then:
+
+```
+npm install
+npm start
+```
+
 ## Unit Tests
 
 To run unit tests, you have to install `mocha` first:
