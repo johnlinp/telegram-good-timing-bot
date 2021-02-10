@@ -1,0 +1,17 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Start!"
+msgstr "開始!"
+
+msgid "Help!"
+msgstr "幫我!"
+
+msgid "Huh?"
+msgstr "蛤？"
+
+msgid "^(?P<plan>.+) when i am (?P<timing>.+)$"
+msgstr "^我(?P<timing>.+)的時候要(?P<plan>.+)$"
+
+msgid "Okay, I will remind you to {plan} when you are {timing}."
+msgstr "好的，我之後會提醒你{timing}的時候要{plan}。"

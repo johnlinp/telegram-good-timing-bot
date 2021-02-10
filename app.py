@@ -2,24 +2,27 @@
 
 import os
 import logging
-import i18n
 import telegram.ext
+
+import goodtiming
 
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+bot = goodtiming.Bot(os.environ.get('LANGUAGE'))
+
 
 def start_command(update, context):
-    update.message.reply_text(_('Start!'))
+    update.message.reply_text(bot.start())
 
 
 def help_command(update, context):
-    update.message.reply_text(_('Help!'))
+    update.message.reply_text(bot.help())
 
 
 def reply_message(update, context):
-    update.message.reply_text(update.message.text)
+    update.message.reply_text(bot.chat(update.message.text))
 
 
 def main():

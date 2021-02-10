@@ -1,0 +1,18 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Start!"
+msgstr ""
+
+msgid "Help!"
+msgstr ""
+
+msgid "Huh?"
+msgstr ""
+
+msgid "^(?P<plan>.+) when i am (?P<timing>.+)$"
+msgstr ""
+
+msgid "Okay, I will remind you to {plan} when you are {timing}."
+msgstr ""
