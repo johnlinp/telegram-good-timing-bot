@@ -2,6 +2,7 @@
 
 import os
 import logging
+import i18n
 import telegram.ext
 
 
@@ -10,11 +11,11 @@ logger = logging.getLogger(__name__)
 
 
 def start_command(update, context):
-    update.message.reply_text('Start!')
+    update.message.reply_text(_('Start!'))
 
 
 def help_command(update, context):
-    update.message.reply_text('Help!')
+    update.message.reply_text(_('Help!'))
 
 
 def reply_message(update, context):
