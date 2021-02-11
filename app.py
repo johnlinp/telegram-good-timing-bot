@@ -14,7 +14,7 @@ bot = goodtiming.Bot(os.environ.get('LANGUAGE'))
 
 
 def start_command(update, context):
-    update.message.reply_text(bot.start())
+    update.message.reply_text(bot.start(str(update.effective_chat.id)))
 
 
 def help_command(update, context):
@@ -22,7 +22,7 @@ def help_command(update, context):
 
 
 def reply_message(update, context):
-    update.message.reply_text(bot.chat(update.message.text))
+    update.message.reply_text(bot.chat(update.message.text, str(update.effective_chat.id)))
 
 
 def main():

@@ -15,3 +15,6 @@ msgstr "^我(?P<timing>.+)的時候要(?P<plan>.+)$"
 
 msgid "Okay, I will remind you to {plan} when you are {timing}."
 msgstr "好的，我之後會提醒你{timing}的時候要{plan}。"
+
+msgid "You already told me that."
+msgstr "你已經跟我講過囉。"

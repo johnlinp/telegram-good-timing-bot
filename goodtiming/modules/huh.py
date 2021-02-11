@@ -8,7 +8,7 @@ class HuhParser:
 
 
 class HuhProcessor:
-    def process(self, request):
+    def process(self, request, doer_id):
         if request.kind != 'HUH':
             return None
         return Response(request.kind, request.arguments)

@@ -16,3 +16,6 @@ msgstr ""
 
 msgid "Okay, I will remind you to {plan} when you are {timing}."
 msgstr ""
+
+msgid "You already told me that."
+msgstr ""
