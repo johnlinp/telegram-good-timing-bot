@@ -31,3 +31,15 @@ msgstr ""
 
 msgid "Go do these things:\n{plans}"
 msgstr ""
+
+msgid "^(the one about )?(?P<plan_pattern>.+) is done$"
+msgstr ""
+
+msgid "I couldn't find anything about {plan_pattern}."
+msgstr ""
+
+msgid "Great! I already marked \"{plan}\" as done."
+msgstr ""
+
+msgid "Great! I already marked these things as done:\n{plans}"
+msgstr ""

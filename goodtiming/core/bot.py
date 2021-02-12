@@ -8,6 +8,7 @@ import goodtiming.core.database
 
 import goodtiming.modules.addtodo
 import goodtiming.modules.reporttiming
+import goodtiming.modules.done
 import goodtiming.modules.huh
 
 
@@ -18,18 +19,21 @@ class Bot:
         self.parser = CompositeParser([
             goodtiming.modules.addtodo.AddTodoParser(),
             goodtiming.modules.reporttiming.ReportTimingParser(),
+            goodtiming.modules.done.DoneParser(),
             goodtiming.modules.huh.HuhParser(),
         ])
 
         self.processor = CompositeProcessor([
             goodtiming.modules.addtodo.AddTodoProcessor(),
             goodtiming.modules.reporttiming.ReportTimingProcessor(),
+            goodtiming.modules.done.DoneProcessor(),
             goodtiming.modules.huh.HuhProcessor(),
         ])
 
         self.renderer = CompositeRenderer([
             goodtiming.modules.addtodo.AddTodoRenderer(),
             goodtiming.modules.reporttiming.ReportTimingRenderer(),
+            goodtiming.modules.done.DoneRenderer(),
             goodtiming.modules.huh.HuhRenderer(),
         ])
 

@@ -1,5 +1,6 @@
 CREATE TABLE doer (
     doer_id VARCHAR(50) NOT NULL,
+    current_timing VARCHAR(500),
     PRIMARY KEY(doer_id)
 );
 
