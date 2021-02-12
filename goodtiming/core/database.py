@@ -15,6 +15,15 @@ class Database:
 
         self.with_error_convert(execute_with_error_convert)
 
+    def fetch(self, query, variables):
+        def fetch_with_cursor(cursor):
+            cursor.execute(query, variables)
+            return cursor.fetchall()
+        def fetch_with_error_convert():
+            return self.with_cursor(fetch_with_cursor)
+
+        return self.with_error_convert(fetch_with_error_convert)
+
     def with_cursor(self, func):
         with psycopg2.connect(os.environ.get('DATABASE_URL')) as connection:
             with connection.cursor() as cursor:

@@ -18,3 +18,17 @@ msgstr "好的，我之後會提醒你{timing}的時候要{plan}。"
 
 msgid "You already told me that."
 msgstr "你已經跟我講過囉。"
+
+msgid "^i am (?P<timing>.+)$"
+msgstr "^我(?P<timing>.+)了$"
+
+msgid "Nothing to do."
+msgstr "沒事做。"
+
+msgid "Go {plan}."
+msgstr "去{plan}。"
+
+msgid ""
+"Go do these things:\n"
+"{plans}"
+msgstr "去做這些事情：\n{plans}"

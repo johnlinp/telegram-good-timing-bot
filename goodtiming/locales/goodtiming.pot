@@ -19,3 +19,15 @@ msgstr ""
 
 msgid "You already told me that."
 msgstr ""
+
+msgid "^i am (?P<timing>.+)$"
+msgstr ""
+
+msgid "Nothing to do."
+msgstr ""
+
+msgid "Go {plan}."
+msgstr ""
+
+msgid "Go do these things:\n{plans}"
+msgstr ""
