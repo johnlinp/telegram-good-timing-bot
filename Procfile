@@ -1,1 +1,2 @@
-web: node index.js
+release: ./release-tasks.sh
+web: python3 app.py

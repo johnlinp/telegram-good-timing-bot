@@ -1,0 +1,67 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Huh?"
+msgstr "蛤？"
+
+msgid "^(?P<plan>.+) when i am (?P<timing>.+)$"
+msgstr "^我(?P<timing>.+)的時候要(?P<plan>.+)$"
+
+msgid "Okay, I will remind you to {plan} when you are {timing}."
+msgstr "好的，我之後會提醒你{timing}的時候要{plan}。"
+
+msgid "You already told me that."
+msgstr "你已經跟我講過囉。"
+
+msgid "^i am (?P<timing>.+)$"
+msgstr "^我(?P<timing>.+)了$"
+
+msgid "Nothing to do."
+msgstr "沒事做。"
+
+msgid "Go {plan}."
+msgstr "去{plan}。"
+
+msgid ""
+"Go do these things:\n"
+"{plans}"
+msgstr ""
+"去做這些事情：\n"
+"{plans}"
+
+msgid "^(the one about )?(?P<plan_pattern>.+) is done$"
+msgstr "^(?P<plan_pattern>.+?)(的?那件)?完成了$"
+
+msgid "I couldn't find anything about {plan_pattern}."
+msgstr "我找不到跟{plan_pattern}有關的事耶。"
+
+msgid "Great! I already marked \"{plan}\" as done."
+msgstr "太好了！我已經把 \"{plan}\" 標為完成了。"
+
+msgid ""
+"Great! I already marked these things as done:\n"
+"{plans}"
+msgstr ""
+"太好了！我已經把這些都標為完成了：\n"
+"{plans}"
+
+msgid ""
+"Welcome!\n"
+"Type \"buy some socks when I am at grocery store\" or type /help to see the "
+"usage."
+msgstr ""
+"歡迎!\n"
+"輸入 \"我到雜貨店的時候要買肥皂\" 或是輸入 /help 來看用法。"
+
+msgid ""
+"I can understand the following patterns:\n"
+"\n"
+"1. <do something> when I am <some timing>\n"
+"2. I am <some timing>\n"
+"3. The one about <something> is done"
+msgstr ""
+"我看得懂以下的語法:\n"
+"\n"
+"1. 我[時機]的時候要[做事情]\n"
+"2. 我[時機]了\n"
+"3. [事情]的那件完成了"

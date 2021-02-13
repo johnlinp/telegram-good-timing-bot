@@ -31,20 +31,5 @@ vi .env # to edit
 And then:
 
 ```
-npm install
-npm start
-```
-
-## Unit Tests
-
-To run unit tests, you have to install `mocha` first:
-
-```
-sudo npm install -g mocha
-```
-
-And then:
-
-```
-npm test
+pipenv run python3 app.py
 ```
