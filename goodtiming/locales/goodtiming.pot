@@ -2,12 +2,6 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Start!"
-msgstr ""
-
-msgid "Help!"
-msgstr ""
-
 msgid "Huh?"
 msgstr ""
 
@@ -42,4 +36,10 @@ msgid "Great! I already marked \"{plan}\" as done."
 msgstr ""
 
 msgid "Great! I already marked these things as done:\n{plans}"
+msgstr ""
+
+msgid "Welcome!\nType \"buy some socks when I am at grocery store\" or type /help to see the usage."
+msgstr ""
+
+msgid "I can understand the following patterns:\n\n1. <do something> when I am <some timing>\n2. I am <some timing>\n3. The one about <something> is done"
 msgstr ""

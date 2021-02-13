@@ -42,10 +42,10 @@ class Bot:
             self.database.execute('INSERT INTO doer (doer_id) VALUES (%s)', (doer_id,))
         except goodtiming.core.database.DatabaseUniqueViolation:
             pass
-        return _('Start!')
+        return _('Welcome!\nType \"buy some socks when I am at grocery store\" or type /help to see the usage.')
 
     def help(self):
-        return _('Help!')
+        return _('I can understand the following patterns:\n\n1. <do something> when I am <some timing>\n2. I am <some timing>\n3. The one about <something> is done')
 
     def chat(self, message, doer_id):
         request = self.parser.parse(message)
