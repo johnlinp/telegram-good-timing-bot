@@ -35,7 +35,10 @@ def main():
 
     updater.dispatcher.add_handler(telegram.ext.MessageHandler(telegram.ext.Filters.text & ~telegram.ext.Filters.command, reply_message))
 
-    updater.start_polling()
+    updater.start_webhook(listen='0.0.0.0',
+            port=os.environ.get('PORT', 8443),
+            url_path=os.environ.get('BOT_TOKEN'))
+    updater.bot.set_webhook('{}{}'.format(os.environ.get('WEBHOOK_BASE_URL'), os.environ.get('BOT_TOKEN')))
 
     updater.idle()
 
