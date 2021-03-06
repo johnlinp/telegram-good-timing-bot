@@ -65,3 +65,16 @@ msgstr ""
 "1. 我[時機]的時候要[做事情]\n"
 "2. 我[時機]了\n"
 "3. [事情]的那件完成了"
+
+msgid "^(what to do)|(what now)|(what should i do)$"
+msgstr "^(現在要幹嘛)|(要幹嘛)|(要做什麼)|(我該做什麼)|(要做什麼)$"
+
+msgid "There is nothing to do for now."
+msgstr "現在沒有事情要做。"
+
+msgid ""
+"When you are {timing}:\n"
+"{plans}"
+msgstr ""
+"當你{timing}的時候:\n"
+"{plans}"

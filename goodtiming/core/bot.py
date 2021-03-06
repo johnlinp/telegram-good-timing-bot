@@ -9,6 +9,7 @@ import goodtiming.core.database
 import goodtiming.modules.addtodo
 import goodtiming.modules.reporttiming
 import goodtiming.modules.done
+import goodtiming.modules.show
 import goodtiming.modules.huh
 
 
@@ -20,6 +21,7 @@ class Bot:
             goodtiming.modules.addtodo.AddTodoParser(),
             goodtiming.modules.reporttiming.ReportTimingParser(),
             goodtiming.modules.done.DoneParser(),
+            goodtiming.modules.show.ShowParser(),
             goodtiming.modules.huh.HuhParser(),
         ])
 
@@ -27,6 +29,7 @@ class Bot:
             goodtiming.modules.addtodo.AddTodoProcessor(),
             goodtiming.modules.reporttiming.ReportTimingProcessor(),
             goodtiming.modules.done.DoneProcessor(),
+            goodtiming.modules.show.ShowProcessor(),
             goodtiming.modules.huh.HuhProcessor(),
         ])
 
@@ -34,6 +37,7 @@ class Bot:
             goodtiming.modules.addtodo.AddTodoRenderer(),
             goodtiming.modules.reporttiming.ReportTimingRenderer(),
             goodtiming.modules.done.DoneRenderer(),
+            goodtiming.modules.show.ShowRenderer(),
             goodtiming.modules.huh.HuhRenderer(),
         ])
 
