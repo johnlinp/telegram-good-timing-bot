@@ -36,19 +36,25 @@ class DoneProcessor:
             return None
 
         plan_pattern = request.arguments['plan_pattern']
-
-        rows = self.database.fetch('SELECT current_timing FROM doer WHERE doer_id = %s', (doer_id,))
-        current_timing = rows[0][0]
-
-        rows = self.database.fetch('SELECT plan FROM todo WHERE doer_id = %s AND timing LIKE %s AND plan LIKE %s', (doer_id, '%{}%'.format(current_timing), '%{}%'.format(plan_pattern)))
-        matched_plans = [row[0] for row in rows]
-
-        self.database.execute('DELETE FROM todo WHERE doer_id = %s AND timing LIKE %s AND plan LIKE %s', (doer_id, '%{}%'.format(current_timing), '%{}%'.format(plan_pattern)))
+        current_timing = self._get_current_timing(doer_id)
+        matched_plans = self._get_matched_plans(doer_id, current_timing, plan_pattern)
+        self._delete_todo(doer_id, current_timing, plan_pattern)
 
         return Response(request.kind, {
             'plan_pattern': plan_pattern,
             'matched_plans': matched_plans,
         })
+
+    def _get_current_timing(self, doer_id):
+        rows = self.database.fetch('SELECT current_timing FROM doer WHERE doer_id = %s', (doer_id,))
+        return rows[0][0]
+
+    def _get_matched_plans(self, doer_id, current_timing, plan_pattern):
+        rows = self.database.fetch('SELECT plan FROM todo WHERE doer_id = %s AND timing LIKE %s AND plan LIKE %s', (doer_id, '%{}%'.format(current_timing), '%{}%'.format(plan_pattern)))
+        return [row[0] for row in rows]
+
+    def _delete_todo(self, doer_id, current_timing, plan_pattern):
+        self.database.execute('DELETE FROM todo WHERE doer_id = %s AND timing LIKE %s AND plan LIKE %s', (doer_id, '%{}%'.format(current_timing), '%{}%'.format(plan_pattern)))
 
 
 class DoneRenderer:
