@@ -4,6 +4,7 @@ from goodtiming.core.request import Request
 from goodtiming.core.response import Response
 
 import goodtiming.core.database
+import goodtiming.util.stringutil
 
 
 class DoneModule:
@@ -80,7 +81,7 @@ class TooManyPlansRenderer:
             return None
 
         matched_plans = response.arguments['matched_plans']
-        return _('There are multiple things I found:\n{plans}\nPlease specify only one at a time.').format(plans='\n'.join(matched_plans))
+        return _('There are multiple things I found:\n{plans}\nPlease specify only one at a time.').format(plans=goodtiming.util.stringutil.format_items(matched_plans))
 
 
 class PlanDoneRenderer:

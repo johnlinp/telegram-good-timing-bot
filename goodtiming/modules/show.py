@@ -4,6 +4,7 @@ from goodtiming.core.request import Request
 from goodtiming.core.response import Response
 
 import goodtiming.core.database
+import goodtiming.util.stringutil
 
 
 class ShowModule:
@@ -59,5 +60,5 @@ class ShowRenderer:
         results = []
         for timing in todo:
             plans = todo[timing]
-            results.append(_('When you are {timing}:\n{plans}').format(timing=timing, plans='\n'.join(plans)))
+            results.append(_('When you are {timing}:\n{plans}').format(timing=timing, plans=goodtiming.util.stringutil.format_items(plans)))
         return '\n'.join(results)

@@ -4,6 +4,7 @@ from goodtiming.core.request import Request
 from goodtiming.core.response import Response
 
 import goodtiming.core.database
+import goodtiming.util.stringutil
 
 
 class ReportTimingModule:
@@ -54,4 +55,4 @@ class ReportTimingRenderer:
         elif len(plans) == 1:
             return _('Go {plan}.').format(plan=plans[0])
         else:
-            return _('Go do these things:\n{plans}').format(plans='\n'.join(plans))
+            return _('Go do these things:\n{plans}').format(plans=goodtiming.util.stringutil.format_items(plans))
