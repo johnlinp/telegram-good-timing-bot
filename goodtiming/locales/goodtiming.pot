@@ -35,7 +35,7 @@ msgstr ""
 msgid "Great! I already marked \"{plan}\" as done."
 msgstr ""
 
-msgid "Great! I already marked these things as done:\n{plans}"
+msgid "There are multiple things I found:\n{plans}\nPlease specify only one at a time."
 msgstr ""
 
 msgid "Welcome!\nType \"buy some socks when I am at grocery store\" or type /help to see the usage."
