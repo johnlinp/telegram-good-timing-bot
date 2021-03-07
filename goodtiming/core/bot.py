@@ -17,29 +17,25 @@ class Bot:
     def __init__(self, language):
         self.database = goodtiming.core.database.Database()
 
-        self.parser = CompositeParser([
-            goodtiming.modules.addtodo.AddTodoParser(),
-            goodtiming.modules.reporttiming.ReportTimingParser(),
-            goodtiming.modules.done.DoneParser(),
-            goodtiming.modules.show.ShowParser(),
-            goodtiming.modules.huh.HuhParser(),
-        ])
+        modules = [
+            goodtiming.modules.addtodo.AddTodoModule(),
+            goodtiming.modules.reporttiming.ReportTimingModule(),
+            goodtiming.modules.done.DoneModule(),
+            goodtiming.modules.show.ShowModule(),
+            goodtiming.modules.huh.HuhModule(),
+        ]
 
-        self.processor = CompositeProcessor([
-            goodtiming.modules.addtodo.AddTodoProcessor(),
-            goodtiming.modules.reporttiming.ReportTimingProcessor(),
-            goodtiming.modules.done.DoneProcessor(),
-            goodtiming.modules.show.ShowProcessor(),
-            goodtiming.modules.huh.HuhProcessor(),
-        ])
+        sub_parsers = []
+        sub_processors = []
+        sub_renderers = []
+        for module in modules:
+            sub_parsers.extend(module.parsers())
+            sub_processors.extend(module.processors())
+            sub_renderers.extend(module.renderers())
 
-        self.renderer = CompositeRenderer([
-            goodtiming.modules.addtodo.AddTodoRenderer(),
-            goodtiming.modules.reporttiming.ReportTimingRenderer(),
-            goodtiming.modules.done.DoneRenderer(),
-            goodtiming.modules.show.ShowRenderer(),
-            goodtiming.modules.huh.HuhRenderer(),
-        ])
+        self.parser = CompositeParser(sub_parsers)
+        self.processor = CompositeProcessor(sub_processors)
+        self.renderer = CompositeRenderer(sub_renderers)
 
     def start(self, doer_id):
         try:

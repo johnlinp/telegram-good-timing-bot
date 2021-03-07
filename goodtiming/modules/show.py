@@ -6,6 +6,17 @@ from goodtiming.core.response import Response
 import goodtiming.core.database
 
 
+class ShowModule:
+    def parsers(self):
+        return [ShowParser()]
+
+    def processors(self):
+        return [ShowProcessor()]
+
+    def renderers(self):
+        return [ShowRenderer()]
+
+
 class ShowParser:
     def parse(self, message):
         match = re.match(_(r'^(what to do)|(what now)|(what should i do)$'), message, re.IGNORECASE)

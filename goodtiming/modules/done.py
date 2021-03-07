@@ -6,6 +6,17 @@ from goodtiming.core.response import Response
 import goodtiming.core.database
 
 
+class DoneModule:
+    def parsers(self):
+        return [DoneParser()]
+
+    def processors(self):
+        return [DoneProcessor()]
+
+    def renderers(self):
+        return [DoneRenderer()]
+
+
 class DoneParser:
     def parse(self, message):
         match = re.match(_(r'^(the one about )?(?P<plan_pattern>.+) is done$'), message, re.IGNORECASE)

@@ -2,6 +2,17 @@ from goodtiming.core.request import Request
 from goodtiming.core.response import Response
 
 
+class HuhModule:
+    def parsers(self):
+        return [HuhParser()]
+
+    def processors(self):
+        return [HuhProcessor()]
+
+    def renderers(self):
+        return [HuhRenderer()]
+
+
 class HuhParser:
     def parse(self, message):
         return Request('HUH', {})

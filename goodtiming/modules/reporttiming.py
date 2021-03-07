@@ -6,6 +6,17 @@ from goodtiming.core.response import Response
 import goodtiming.core.database
 
 
+class ReportTimingModule:
+    def parsers(self):
+        return [ReportTimingParser()]
+
+    def processors(self):
+        return [ReportTimingProcessor()]
+
+    def renderers(self):
+        return [ReportTimingRenderer()]
+
+
 class ReportTimingParser:
     def parse(self, message):
         match = re.match(_(r'^i am (?P<timing>.+)$'), message, re.IGNORECASE)

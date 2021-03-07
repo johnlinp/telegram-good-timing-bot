@@ -6,6 +6,17 @@ from goodtiming.core.response import Response
 import goodtiming.core.database
 
 
+class AddTodoModule:
+    def parsers(self):
+        return [AddTodoParser()]
+
+    def processors(self):
+        return [AddTodoProcessor()]
+
+    def renderers(self):
+        return [AddTodoRenderer()]
+
+
 class AddTodoParser:
     def parse(self, message):
         match = re.match(_(r'^(?P<plan>.+) when i am (?P<timing>.+)$'), message, re.IGNORECASE)
