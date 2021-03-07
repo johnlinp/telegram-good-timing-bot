@@ -14,7 +14,7 @@ class AddTodoModule:
         return [AddTodoProcessor()]
 
     def renderers(self):
-        return [AddTodoRenderer()]
+        return [TodoAddedRenderer(), AlreadyToldTodoRenderer()]
 
 
 class AddTodoParser:
@@ -35,22 +35,26 @@ class AddTodoProcessor:
     def process(self, request, doer_id):
         if request.kind != 'ADD-TODO':
             return None
+
         try:
             self.database.execute('INSERT INTO todo (doer_id, timing, plan) VALUES (%s, %s, %s)', (doer_id, request.arguments['timing'], request.arguments['plan']))
-            return Response(request.kind, {
-                'already-told': False,
+            return Response('TODO-ADDED', {
                 'plan': request.arguments['plan'],
                 'timing': request.arguments['timing'],
             })
         except goodtiming.core.database.DatabaseUniqueViolation:
-            return Response(request.kind, {'already-told': True})
+            return Response('ALREADY-TOLD-TODO', {})
 
 
-class AddTodoRenderer:
+class TodoAddedRenderer:
     def render(self, response):
-        if response.kind != 'ADD-TODO':
+        if response.kind != 'TODO-ADDED':
             return None
-        if response.arguments['already-told']:
-            return _('You already told me that.')
-        else:
-            return _('Okay, I will remind you to {plan} when you are {timing}.').format(**response.arguments)
+        return _('Okay, I will remind you to {plan} when you are {timing}.').format(**response.arguments)
+
+
+class AlreadyToldTodoRenderer:
+    def render(self, response):
+        if response.kind != 'ALREADY-TOLD-TODO':
+            return None
+        return _('You already told me that.')
