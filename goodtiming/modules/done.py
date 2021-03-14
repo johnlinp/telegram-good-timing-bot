@@ -9,7 +9,7 @@ import goodtiming.util.stringutil
 
 class DoneModule:
     def parsers(self):
-        return [DoneParser()]
+        return [PlanDoneParser()]
 
     def processors(self):
         return [DoneProcessor()]
@@ -18,7 +18,7 @@ class DoneModule:
         return [PlanNotFoundRenderer(), TooManyPlansRenderer(), PlanDoneRenderer()]
 
 
-class DoneParser:
+class PlanDoneParser:
     def parse(self, message):
         match = re.match(_(r'^(the one about )?(?P<plan_pattern>.+) is done$'), message, re.IGNORECASE)
         if not match:
