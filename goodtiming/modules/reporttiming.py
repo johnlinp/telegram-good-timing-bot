@@ -9,21 +9,21 @@ import goodtiming.util.stringutil
 
 class ReportTimingModule:
     def parsers(self):
-        return [ReportTimingParser()]
+        return [ReportPresentTimingParser()]
 
     def processors(self):
         return [ReportTimingProcessor()]
 
     def renderers(self):
-        return [ReportTimingRenderer()]
+        return [ReportPresentTimingRenderer()]
 
 
-class ReportTimingParser:
+class ReportPresentTimingParser:
     def parse(self, message):
         match = re.match(_(r'^i am (?P<timing>.+)$'), message, re.IGNORECASE)
         if not match:
             return None
-        return Request('REPORT-TIMING', {
+        return Request('REPORT-PRESENT-TIMING', {
             'timing': match.group('timing'),
         })
 
@@ -33,7 +33,7 @@ class ReportTimingProcessor:
         self.database = goodtiming.core.database.Database()
 
     def process(self, request, doer_id):
-        if request.kind != 'REPORT-TIMING':
+        if request.kind != 'REPORT-PRESENT-TIMING':
             return None
 
         self.database.execute('UPDATE doer SET current_timing = %s WHERE doer_id = %s', (request.arguments['timing'], doer_id))
@@ -45,9 +45,9 @@ class ReportTimingProcessor:
         })
 
 
-class ReportTimingRenderer:
+class ReportPresentTimingRenderer:
     def render(self, response):
-        if response.kind != 'REPORT-TIMING':
+        if response.kind != 'REPORT-PRESENT-TIMING':
             return None
         plans = response.arguments['plans']
         if len(plans) == 0:
