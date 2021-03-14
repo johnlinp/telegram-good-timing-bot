@@ -9,7 +9,7 @@ import goodtiming.util.stringutil
 
 class DoneModule:
     def parsers(self):
-        return [PlanDoneParser()]
+        return [PlanDoneParser(), BareDoneParser()]
 
     def processors(self):
         return [DoneProcessor()]
@@ -25,6 +25,16 @@ class PlanDoneParser:
             return None
         return Request('DONE', {
             'plan_pattern': match.group('plan_pattern'),
+        })
+
+
+class BareDoneParser:
+    def parse(self, message):
+        match = re.match(_(r"^(it's )?done$"), message, re.IGNORECASE)
+        if not match:
+            return None
+        return Request('DONE', {
+            'plan_pattern': None,
         })
 
 
@@ -60,7 +70,10 @@ class DoneProcessor:
         return rows[0][0]
 
     def _get_matched_plans(self, doer_id, current_timing, plan_pattern):
-        rows = self.database.fetch('SELECT plan FROM todo WHERE doer_id = %s AND timing LIKE %s AND plan LIKE %s', (doer_id, '%{}%'.format(current_timing), '%{}%'.format(plan_pattern)))
+        if plan_pattern is None:
+            rows = self.database.fetch('SELECT plan FROM todo WHERE doer_id = %s AND timing LIKE %s', (doer_id, '%{}%'.format(current_timing)))
+        else:
+            rows = self.database.fetch('SELECT plan FROM todo WHERE doer_id = %s AND timing LIKE %s AND plan LIKE %s', (doer_id, '%{}%'.format(current_timing), '%{}%'.format(plan_pattern)))
         return [row[0] for row in rows]
 
     def _delete_todo(self, doer_id, current_timing, matched_plan):
@@ -72,7 +85,11 @@ class PlanNotFoundRenderer:
         if response.kind != 'PLAN-NOT-FOUND':
             return None
 
-        return _("I couldn't find anything about {plan_pattern}.").format(plan_pattern=response.arguments['plan_pattern'])
+        plan_pattern = response.arguments['plan_pattern']
+        if plan_pattern is None:
+            return _("I couldn't find anything to mark as done.").format()
+        else:
+            return _("I couldn't find anything about {plan_pattern}.").format(plan_pattern=response.arguments['plan_pattern'])
 
 
 class TooManyPlansRenderer:

@@ -80,3 +80,9 @@ msgid ""
 msgstr ""
 "當你{timing}的時候:\n"
 "{plans}"
+
+msgid "^(it's )?done$"
+msgstr "^完成(了)?$"
+
+msgid "I couldn't find anything to mark as done."
+msgstr "我找不到可以完成的事耶。"
