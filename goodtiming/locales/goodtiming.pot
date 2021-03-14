@@ -58,3 +58,12 @@ msgstr ""
 
 msgid "I couldn't find anything to mark as done."
 msgstr ""
+
+msgid "^i was (?P<timing>.+)$"
+msgstr ""
+
+msgid "You should have done {plan}."
+msgstr ""
+
+msgid "You should have done these things:\n{plans}"
+msgstr ""

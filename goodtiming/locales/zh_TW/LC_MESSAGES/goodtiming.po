@@ -86,3 +86,16 @@ msgstr "^完成(了)?$"
 
 msgid "I couldn't find anything to mark as done."
 msgstr "我找不到可以完成的事耶。"
+
+msgid "^i was (?P<timing>.+)$"
+msgstr "^我(當時|之前)(?P<timing>.+)$"
+
+msgid "You should have done {plan}."
+msgstr "你當時應該要去{plan}"
+
+msgid ""
+"You should have done these things:\n"
+"{plans}"
+msgstr ""
+"你當時應該要去做這些事情：\n"
+"{plans}"
