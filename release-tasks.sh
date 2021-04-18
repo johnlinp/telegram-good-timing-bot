@@ -2,5 +2,5 @@
 
 # run database migration
 pushd ./goodtiming/database
-./migrate.sh
+./migrate.py
 popd
