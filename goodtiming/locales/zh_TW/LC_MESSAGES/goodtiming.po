@@ -30,7 +30,7 @@ msgstr ""
 "{plans}"
 
 msgid "^(the one about )?(?P<plan_pattern>.+) is done$"
-msgstr "^(?P<plan_pattern>.+?)(的?那件)?完成了$"
+msgstr "^(?P<plan_pattern>.+?)(的?那件(事?))?完成了$"
 
 msgid "I couldn't find anything about {plan_pattern}."
 msgstr "我找不到跟{plan_pattern}有關的事耶。"
