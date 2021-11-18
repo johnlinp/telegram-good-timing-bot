@@ -8,7 +8,7 @@ import goodtiming.core.database
 
 import goodtiming.modules.addtodo
 import goodtiming.modules.reporttiming
-import goodtiming.modules.done
+import goodtiming.modules.erase
 import goodtiming.modules.show
 import goodtiming.modules.huh
 
@@ -20,7 +20,7 @@ class Bot:
         modules = [
             goodtiming.modules.addtodo.AddTodoModule(),
             goodtiming.modules.reporttiming.ReportTimingModule(),
-            goodtiming.modules.done.DoneModule(),
+            goodtiming.modules.erase.EraseModule(),
             goodtiming.modules.show.ShowModule(),
             goodtiming.modules.huh.HuhModule(),
         ]

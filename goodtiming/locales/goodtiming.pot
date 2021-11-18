@@ -35,6 +35,9 @@ msgstr ""
 msgid "Great! I already marked \"{plan}\" as done."
 msgstr ""
 
+msgid "Okay, I already cancelled \"{plan}\"."
+msgstr ""
+
 msgid "There are multiple things I found:\n{plans}\nPlease specify only one at a time."
 msgstr ""
 
@@ -56,7 +59,7 @@ msgstr ""
 msgid "^(it's )?done$"
 msgstr ""
 
-msgid "I couldn't find anything to mark as done."
+msgid "I couldn't find anything."
 msgstr ""
 
 msgid "^i was (?P<timing>.+)$"
@@ -66,4 +69,10 @@ msgid "You should have done {plan}."
 msgstr ""
 
 msgid "You should have done these things:\n{plans}"
+msgstr ""
+
+msgid "^cancel (the one about )?(?P<plan_pattern>.+)$"
+msgstr ""
+
+msgid "^cancel it$"
 msgstr ""

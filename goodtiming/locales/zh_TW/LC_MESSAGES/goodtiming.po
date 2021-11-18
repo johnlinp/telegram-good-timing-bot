@@ -38,6 +38,9 @@ msgstr "我找不到跟{plan_pattern}有關的事耶。"
 msgid "Great! I already marked \"{plan}\" as done."
 msgstr "太好了！我已經把 \"{plan}\" 標為完成了。"
 
+msgid "Okay, I already cancelled \"{plan}\"."
+msgstr "好的，我已經把 \"{plan}\" 取消了。"
+
 msgid ""
 "There are multiple things I found:\n"
 "{plans}\n"
@@ -84,8 +87,8 @@ msgstr ""
 msgid "^(it's )?done$"
 msgstr "^完成(了)?$"
 
-msgid "I couldn't find anything to mark as done."
-msgstr "我找不到可以完成的事耶。"
+msgid "I couldn't find anything."
+msgstr "我找不到事情耶。"
 
 msgid "^i was (?P<timing>.+)$"
 msgstr "^我(當時|之前)(?P<timing>.+)$"
@@ -99,3 +102,9 @@ msgid ""
 msgstr ""
 "你當時應該要去做這些事情：\n"
 "{plans}"
+
+msgid "^cancel (the one about )?(?P<plan_pattern>.+)$"
+msgstr "^(?P<plan_pattern>.+?)(的?那件(事?))?不用了$"
+
+msgid "^cancel it$"
+msgstr "不用了"

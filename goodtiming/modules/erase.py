@@ -7,15 +7,15 @@ import goodtiming.core.database
 import goodtiming.util.stringutil
 
 
-class DoneModule:
+class EraseModule:
     def parsers(self):
-        return [PlanDoneParser(), BareDoneParser()]
+        return [BareDoneParser(), PlanDoneParser(), BareCancelParser(), PlanCancelParser()]
 
     def processors(self):
-        return [DoneProcessor()]
+        return [EraseProcessor()]
 
     def renderers(self):
-        return [PlanNotFoundRenderer(), TooManyPlansRenderer(), PlanDoneRenderer()]
+        return [PlanNotFoundRenderer(), TooManyPlansRenderer(), PlanErasedRenderer()]
 
 
 class PlanDoneParser:
@@ -23,7 +23,8 @@ class PlanDoneParser:
         match = re.match(_(r'^(the one about )?(?P<plan_pattern>.+) is done$'), message, re.IGNORECASE)
         if not match:
             return None
-        return Request('DONE', {
+        return Request('ERASE', {
+            'action': 'DONE',
             'plan_pattern': match.group('plan_pattern'),
         })
 
@@ -33,17 +34,40 @@ class BareDoneParser:
         match = re.match(_(r"^(it's )?done$"), message, re.IGNORECASE)
         if not match:
             return None
-        return Request('DONE', {
+        return Request('ERASE', {
+            'action': 'DONE',
             'plan_pattern': None,
         })
 
 
-class DoneProcessor:
+class PlanCancelParser:
+    def parse(self, message):
+        match = re.match(_(r'^cancel (the one about )?(?P<plan_pattern>.+)$'), message, re.IGNORECASE)
+        if not match:
+            return None
+        return Request('ERASE', {
+            'action': 'CANCEL',
+            'plan_pattern': match.group('plan_pattern'),
+        })
+
+
+class BareCancelParser:
+    def parse(self, message):
+        match = re.match(_(r'^cancel it$'), message, re.IGNORECASE)
+        if not match:
+            return None
+        return Request('ERASE', {
+            'action': 'CANCEL',
+            'plan_pattern': None,
+        })
+
+
+class EraseProcessor:
     def __init__(self):
         self.database = goodtiming.core.database.Database()
 
     def process(self, request, doer_id):
-        if request.kind != 'DONE':
+        if request.kind != 'ERASE':
             return None
 
         plan_pattern = request.arguments['plan_pattern']
@@ -61,7 +85,8 @@ class DoneProcessor:
         matched_plan = matched_plans[0]
         self._delete_todo(doer_id, current_timing, matched_plan)
 
-        return Response('PLAN-DONE', {
+        return Response('PLAN-ERASE', {
+            'action': request.arguments['action'],
             'matched_plan': matched_plan,
         })
 
@@ -87,7 +112,7 @@ class PlanNotFoundRenderer:
 
         plan_pattern = response.arguments['plan_pattern']
         if plan_pattern is None:
-            return _("I couldn't find anything to mark as done.").format()
+            return _("I couldn't find anything.").format()
         else:
             return _("I couldn't find anything about {plan_pattern}.").format(plan_pattern=response.arguments['plan_pattern'])
 
@@ -101,9 +126,13 @@ class TooManyPlansRenderer:
         return _('There are multiple things I found:\n{plans}\nPlease specify only one at a time.').format(plans=goodtiming.util.stringutil.format_items(matched_plans))
 
 
-class PlanDoneRenderer:
+class PlanErasedRenderer:
     def render(self, response):
-        if response.kind != 'PLAN-DONE':
+        if response.kind != 'PLAN-ERASE':
             return None
 
-        return _('Great! I already marked "{plan}" as done.').format(plan=response.arguments['matched_plan'])
+        if response.arguments['action'] == 'DONE':
+            return _('Great! I already marked "{plan}" as done.').format(plan=response.arguments['matched_plan'])
+        if response.arguments['action'] == 'CANCEL':
+            return _('Okay, I already cancelled "{plan}".').format(plan=response.arguments['matched_plan'])
+        raise AssertionError('should not happen')
