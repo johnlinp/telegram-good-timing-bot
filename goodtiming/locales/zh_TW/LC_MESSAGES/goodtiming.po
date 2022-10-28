@@ -30,7 +30,7 @@ msgstr ""
 "{plans}"
 
 msgid "^(the one about )?(?P<plan_pattern>.+) is done$"
-msgstr "^(?P<plan_pattern>.+?)(\\s*的?那件事?情?)?完成了$"
+msgstr "^(?P<plan_pattern>.+?)(\\s*)(的?那件事?情?)?完成了$"
 
 msgid "I couldn't find anything about {plan_pattern}."
 msgstr "我找不到跟{plan_pattern}有關的事耶。"
@@ -104,7 +104,7 @@ msgstr ""
 "{plans}"
 
 msgid "^cancel (the one about )?(?P<plan_pattern>.+)$"
-msgstr "^(?P<plan_pattern>.+?)(\\s*的?那件事?情?)?不用了$"
+msgstr "^(?P<plan_pattern>.+?)(\\s*)(的?那件事?情?)?不用了$"
 
 msgid "^cancel it$"
 msgstr "不用了"
