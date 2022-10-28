@@ -19,17 +19,23 @@ Good timings can be:
 and more, whatever you want.
 
 
-## How to Run
+## How to Run Locally
 
-To run the server, you have to prepare the `.env` file:
-
-```
-cp .env.example .env
-vi .env # to edit
-```
-
-And then:
+To run the server locally, you have to prepare the `.env` file first:
 
 ```
-pipenv run python3 app.py
+$ cp .env.example .env
+$ vim .env # to edit
+```
+
+After preparing the `.env` file, you can start building a Docker image:
+
+```
+$ docker build -t telegram-good-timing-bot .
+```
+
+Then run it:
+
+```
+$ docker run --rm telegram-good-timing-bot
 ```
