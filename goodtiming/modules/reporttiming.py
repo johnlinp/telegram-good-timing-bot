@@ -48,7 +48,7 @@ class ReportTimingProcessor:
 
         self.database.execute('UPDATE doer SET current_timing = %s WHERE doer_id = %s', (request.arguments['timing'], doer_id))
 
-        rows = self.database.fetch('SELECT plan FROM todo WHERE doer_id = %s AND timing LIKE %s', (doer_id, '%{}%'.format(request.arguments['timing'])))
+        rows = self.database.fetch('SELECT plan FROM todo WHERE doer_id = %s AND LOWER(timing) LIKE LOWER(%s)', (doer_id, '%{}%'.format(request.arguments['timing'])))
         plans = [row[0] for row in rows]
         return Response(request.kind, {
             'plans': plans,

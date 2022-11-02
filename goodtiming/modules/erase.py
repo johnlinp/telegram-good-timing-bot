@@ -96,13 +96,13 @@ class EraseProcessor:
 
     def _get_matched_plans(self, doer_id, current_timing, plan_pattern):
         if plan_pattern is None:
-            rows = self.database.fetch('SELECT plan FROM todo WHERE doer_id = %s AND timing LIKE %s', (doer_id, '%{}%'.format(current_timing)))
+            rows = self.database.fetch('SELECT plan FROM todo WHERE doer_id = %s AND LOWER(timing) LIKE LOWER(%s)', (doer_id, '%{}%'.format(current_timing)))
         else:
-            rows = self.database.fetch('SELECT plan FROM todo WHERE doer_id = %s AND timing LIKE %s AND LOWER(plan) LIKE LOWER(%s)', (doer_id, '%{}%'.format(current_timing), '%{}%'.format(plan_pattern)))
+            rows = self.database.fetch('SELECT plan FROM todo WHERE doer_id = %s AND LOWER(timing) LIKE LOWER(%s) AND LOWER(plan) LIKE LOWER(%s)', (doer_id, '%{}%'.format(current_timing), '%{}%'.format(plan_pattern)))
         return [row[0] for row in rows]
 
     def _delete_todo(self, doer_id, current_timing, matched_plan):
-        self.database.execute('DELETE FROM todo WHERE doer_id = %s AND timing LIKE %s AND LOWER(plan) = LOWER(%s)', (doer_id, '%{}%'.format(current_timing), matched_plan))
+        self.database.execute('DELETE FROM todo WHERE doer_id = %s AND LOWER(timing) LIKE LOWER(%s) AND LOWER(plan) = LOWER(%s)', (doer_id, '%{}%'.format(current_timing), matched_plan))
 
 
 class PlanNotFoundRenderer:
